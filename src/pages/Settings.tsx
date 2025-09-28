@@ -9,13 +9,11 @@ import {
   NumberInput,
   TextInput,
   Select,
-  Grid,
 } from '@mantine/core';
 import {
   IconDeviceFloppy,
   IconRefresh,
 } from '@tabler/icons-react';
-import { DevKitAccountManager } from '../components/DevKitAccountManager';
 
 export default function Settings() {
   return (
@@ -95,38 +93,30 @@ export default function Settings() {
         </Stack>
       </Card>
 
-      <Grid>
-        <Grid.Col span={{ base: 12, md: 6 }}>
-          <Card withBorder padding="lg" radius="md">
-            <Text fw={500} mb="md">UI Preferences</Text>
-            <Stack gap="md">
-              <Select
-                label="Theme"
-                placeholder="Select theme"
-                data={[
-                  { value: 'auto', label: 'Auto (System)' },
-                  { value: 'light', label: 'Light' },
-                  { value: 'dark', label: 'Dark' },
-                ]}
-                defaultValue="auto"
-              />
-              <Switch
-                label="Show Advanced Options"
-                description="Display advanced configuration options"
-              />
-              <Switch
-                label="Enable Notifications"
-                description="Show desktop notifications for transactions"
-                defaultChecked
-              />
-            </Stack>
-          </Card>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, md: 6 }}>
-          <DevKitAccountManager />
-        </Grid.Col>
-      </Grid>
+      <Card withBorder padding="lg" radius="md">
+        <Text fw={500} mb="md">UI Preferences</Text>
+        <Stack gap="md">
+          <Select
+            label="Theme"
+            placeholder="Select theme"
+            data={[
+              { value: 'auto', label: 'Auto (System)' },
+              { value: 'light', label: 'Light' },
+              { value: 'dark', label: 'Dark' },
+            ]}
+            defaultValue="auto"
+          />
+          <Switch
+            label="Show Advanced Options"
+            description="Display advanced configuration options"
+          />
+          <Switch
+            label="Enable Notifications"
+            description="Show desktop notifications for transactions"
+            defaultChecked
+          />
+        </Stack>
+      </Card>
     </Stack>
   );
 }

@@ -42,7 +42,7 @@ export default function App() {
       }}
       padding="md"
     >
-      <AppShell.Header>
+      <AppShell.Header style={{ zIndex: 1001 }}>
         <Group h="100%" px="md" justify="space-between">
           <Group>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />

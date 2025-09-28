@@ -74,7 +74,7 @@ export function NetworkDropdown() {
   };
 
   return (
-    <Menu shadow="md" width={260} position="bottom-end">
+    <Menu shadow="md" width={260} position="bottom-end" zIndex={1002}>
       <Menu.Target>
         <Button
           variant="light"
