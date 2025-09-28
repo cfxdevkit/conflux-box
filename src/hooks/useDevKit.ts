@@ -76,6 +76,9 @@ export function useStartNode() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
       queryClient.invalidateQueries({ queryKey: ['public-status'] });
+      // Refresh accounts and balances when node starts (accounts get funded)
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-balance'] });
     },
     onError: (error: any) => {
       handleApiError(error as any, 'Failed to start node');
