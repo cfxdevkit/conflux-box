@@ -1,34 +1,41 @@
-import { AppShell, Burger, Group, Text, NavLink, Container } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import {
-  IconHome,
-  IconWallet,
+  AppShell,
+  Burger,
+  Container,
+  Group,
+  NavLink,
+  Text,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import {
   IconCode,
+  IconHome,
   IconNetwork,
   IconSettings,
-} from '@tabler/icons-react';
-import { Header } from './components/Header';
-import Dashboard from './pages/Dashboard';
-import Accounts from './pages/Accounts';
-import Contracts from './pages/Contracts';
-import Network from './pages/Network';
-import Settings from './pages/Settings';
-import { useWebSocket } from './services/websocket';
+  IconWallet,
+} from "@tabler/icons-react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Header } from "./components/Header";
+import Accounts from "./pages/Accounts";
+import Contracts from "./pages/Contracts";
+import Dashboard from "./pages/Dashboard";
+import Network from "./pages/Network";
+import Settings from "./pages/Settings";
+import { useWebSocket } from "./services/websocket";
 
 const navigation = [
-  { label: 'Dashboard', icon: IconHome, path: '/' },
-  { label: 'Accounts', icon: IconWallet, path: '/accounts' },
-  { label: 'Contracts', icon: IconCode, path: '/contracts' },
-  { label: 'Node Control', icon: IconNetwork, path: '/network' },
-  { label: 'Settings', icon: IconSettings, path: '/settings' },
+  { label: "Dashboard", icon: IconHome, path: "/" },
+  { label: "Accounts", icon: IconWallet, path: "/accounts" },
+  { label: "Contracts", icon: IconCode, path: "/contracts" },
+  { label: "Node Control", icon: IconNetwork, path: "/network" },
+  { label: "Settings", icon: IconSettings, path: "/settings" },
 ];
 
 export default function App() {
   const [opened, { toggle }] = useDisclosure();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Initialize WebSocket connection
   useWebSocket();
 
@@ -37,15 +44,20 @@ export default function App() {
       header={{ height: 60 }}
       navbar={{
         width: 250,
-        breakpoint: 'sm',
+        breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
       padding="md"
     >
-      <AppShell.Header style={{ zIndex: 1001 }}>
+      <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
           <Group>
-            <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              hiddenFrom="sm"
+              size="sm"
+            />
             <Text size="xl" fw={700} c="blue">
               Conflux Box
             </Text>
