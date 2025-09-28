@@ -50,6 +50,7 @@
     "postcss": "^8.4.32",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
+    "solc": "^0.8.30",
     "typescript": "^5.2.2",
     "vite": "^5.0.5"
   },
