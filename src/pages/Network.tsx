@@ -14,17 +14,23 @@ import {
 } from '@tabler/icons-react';
 // type NetworkType not used here
 import { NodeControlPanel } from '../components/NodeControlPanel';
-import { useAutoDevKitStatus, useCurrentNetwork } from '../hooks/useDevKit';
+import { useAutoDevKitStatus, useCurrentNetwork, useBlockNumbers } from '../hooks/useDevKit';
 
 export default function Network() {
   const { data: devkitStatus, refetch } = useAutoDevKitStatus();
   const { data: currentNetworkData, refetch: refetchNetwork } = useCurrentNetwork();
+  const { data: blockNumbers, refetch: refetchBlockNumbers } = useBlockNumbers(currentNetworkData?.network === 'local');
 
   const currentNetwork = currentNetworkData?.network || 'local';
+  
+  // Use RPC block numbers if backend doesn't provide them
+  const coreBlockNumber = devkitStatus?.network?.blockNumber ?? blockNumbers?.core ?? '---';
+  const evmBlockNumber = devkitStatus?.network?.evmBlockNumber ?? blockNumbers?.evm ?? '---';
 
   const handleRefreshStatus = () => {
     refetch();
     refetchNetwork();
+    refetchBlockNumbers();
   };
 
   return (
@@ -67,7 +73,7 @@ export default function Network() {
                 </Group>
                 <Group justify="space-between">
                   <Text size="sm">Block Number</Text>
-                  <Text size="sm" ff="monospace">{devkitStatus?.network?.blockNumber || "---"}</Text>
+                  <Text size="sm" ff="monospace">{coreBlockNumber}</Text>
                 </Group>
               </Stack>
             </Card>
@@ -96,7 +102,7 @@ export default function Network() {
                 </Group>
                 <Group justify="space-between">
                   <Text size="sm">Block Number</Text>
-                  <Text size="sm" ff="monospace">{devkitStatus?.network?.evmBlockNumber || "---"}</Text>
+                  <Text size="sm" ff="monospace">{evmBlockNumber}</Text>
                 </Group>
               </Stack>
             </Card>

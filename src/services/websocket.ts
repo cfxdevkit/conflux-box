@@ -150,11 +150,98 @@ function handleDevKitMessage(message: WebSocketMessage, queryClient: any) {
       queryClient.setQueryData(['public-status'], message.data);
       break;
 
+    case 'node-started':
+      // Reset mining statistics when node starts
+      queryClient.setQueryData(['devkit-status'], (oldData: any) => {
+        if (!oldData) return oldData;
+        
+        const updatedData = { ...oldData };
+        if (updatedData.mining) {
+          updatedData.mining.blocksMined = 0;
+        }
+        
+        // Reset block numbers to initial state
+        if (!updatedData.network) updatedData.network = {};
+        updatedData.network.blockNumber = 0;
+        updatedData.network.evmBlockNumber = 0;
+        
+        return updatedData;
+      });
+      
+      queryClient.setQueryData(['public-status'], (oldData: any) => {
+        if (!oldData) return oldData;
+        
+        const updatedData = { ...oldData };
+        if (updatedData.mining) {
+          updatedData.mining.blocksMined = 0;
+        }
+        
+        // Reset block numbers to initial state
+        if (!updatedData.network) updatedData.network = {};
+        updatedData.network.blockNumber = 0;
+        updatedData.network.evmBlockNumber = 0;
+        
+        return updatedData;
+      });
+      
+      // Refresh all relevant queries
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-balance'] });
+      
+      notifications.show({
+        title: 'DevKit Node Started',
+        message: 'Node is running and mining statistics reset',
+        color: 'green',
+        autoClose: 3000,
+      });
+      break;
+
     case 'block-mined':
+      // Update current status with new block number
+      queryClient.setQueryData(['devkit-status'], (oldData: any) => {
+        if (!oldData) return oldData;
+        
+        const updatedData = { ...oldData };
+        if (!updatedData.network) updatedData.network = {};
+        
+        if (message.data.chain === 'core') {
+          updatedData.network.blockNumber = message.data.blockNumber;
+        } else if (message.data.chain === 'evm') {
+          updatedData.network.evmBlockNumber = message.data.blockNumber;
+        }
+        
+        return updatedData;
+      });
+      
+      queryClient.setQueryData(['public-status'], (oldData: any) => {
+        if (!oldData) return oldData;
+        
+        const updatedData = { ...oldData };
+        if (!updatedData.network) updatedData.network = {};
+        
+        if (message.data.chain === 'core') {
+          updatedData.network.blockNumber = message.data.blockNumber;
+        } else if (message.data.chain === 'evm') {
+          updatedData.network.evmBlockNumber = message.data.blockNumber;
+        }
+        
+        return updatedData;
+      });
+      
+      // Update block numbers cache
+      queryClient.setQueryData(['block-numbers'], (oldData: any) => {
+        const currentData = oldData || { core: null, evm: null };
+        if (message.data.chain === 'core') {
+          return { ...currentData, core: message.data.blockNumber };
+        } else if (message.data.chain === 'evm') {
+          return { ...currentData, evm: message.data.blockNumber };
+        }
+        return currentData;
+      });
+      
       // Invalidate account balances and status
       queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
       queryClient.invalidateQueries({ queryKey: ['devkit-balance'] });
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
       
       // Show notification for new block
       notifications.show({

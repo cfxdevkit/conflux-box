@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DevKitApiService } from '../services/api';
 import { handleApiError } from '../utils/errorHandling';
 import { useAuthStore } from '../stores/authStore';
+import { RPCClient } from '../utils/rpc';
 
 // Hook for DevKit status
 export function useDevKitStatus(enabled = true) {
@@ -65,6 +66,16 @@ export function useAccountBalance(index: number) {
     queryFn: () => DevKitApiService.getAccountBalance(index),
     enabled: index >= 0,
     refetchInterval: 10000,
+  });
+}
+
+// Hook for real-time block numbers
+export function useBlockNumbers(enabled = true) {
+  return useQuery({
+    queryKey: ['block-numbers'],
+    queryFn: () => RPCClient.fetchBothBlockNumbers(),
+    enabled,
+    refetchInterval: 5000, // Refresh every 5 seconds
   });
 }
 

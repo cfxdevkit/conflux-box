@@ -23,16 +23,22 @@ import {
   IconPlayerStop,
   IconAlertCircle
 } from '@tabler/icons-react';
-import { useAutoDevKitStatus, useCurrentNetwork, useStartNode, useStopNode } from '../hooks/useDevKit';
+import { useAutoDevKitStatus, useCurrentNetwork, useStartNode, useStopNode, useBlockNumbers } from '../hooks/useDevKit';
 
 export default function Dashboard() {
   const { data: status, isLoading, refetch } = useAutoDevKitStatus();
   const { data: currentNetworkData } = useCurrentNetwork();
+  const { data: blockNumbers } = useBlockNumbers(currentNetworkData?.network === 'local');
   const startNodeMutation = useStartNode();
   const stopNodeMutation = useStopNode();
 
   const currentNetwork = currentNetworkData?.network || 'local';
   const nodeRunning = status?.running || false;
+  
+  // Get Core block number from status or RPC, show "---" when node is stopped
+  const coreBlockNumber = nodeRunning 
+    ? (status?.network?.blockNumber ?? blockNumbers?.core ?? '---')
+    : '---';
 
   const stats = [
     {
@@ -54,10 +60,10 @@ export default function Dashboard() {
       color: status?.mining?.isRunning ? 'green' : 'gray',
     },
     {
-      title: 'Blocks Mined',
-      value: status?.mining?.blocksMined || 0,
+      title: 'Core Block Number',
+      value: coreBlockNumber,
       icon: IconNetwork,
-      color: 'orange',
+      color: nodeRunning ? 'orange' : 'gray',
     },
   ];
 
