@@ -19,13 +19,17 @@ import { useAutoDevKitStatus, useCurrentNetwork, useBlockNumbers } from '../hook
 export default function Network() {
   const { data: devkitStatus, refetch } = useAutoDevKitStatus();
   const { data: currentNetworkData, refetch: refetchNetwork } = useCurrentNetwork();
-  const { data: blockNumbers, refetch: refetchBlockNumbers } = useBlockNumbers(currentNetworkData?.network === 'local');
-
-  const currentNetwork = currentNetworkData?.network || 'local';
   
-  // Use RPC block numbers if backend doesn't provide them
-  const coreBlockNumber = devkitStatus?.network?.blockNumber ?? blockNumbers?.core ?? '---';
-  const evmBlockNumber = devkitStatus?.network?.evmBlockNumber ?? blockNumbers?.evm ?? '---';
+  const currentNetwork = currentNetworkData?.network || 'local';
+  const { data: blockNumbers, refetch: refetchBlockNumbers } = useBlockNumbers(currentNetwork as 'local' | 'testnet' | 'mainnet');
+  
+  // Use RPC block numbers if backend doesn't provide them, or use RPC for remote networks
+  const coreBlockNumber = currentNetwork === 'local' 
+    ? (devkitStatus?.network?.blockNumber ?? blockNumbers?.core ?? '---')
+    : (blockNumbers?.core ?? '---');
+  const evmBlockNumber = currentNetwork === 'local'
+    ? (devkitStatus?.network?.evmBlockNumber ?? blockNumbers?.evm ?? '---')
+    : (blockNumbers?.evm ?? '---');
 
   const handleRefreshStatus = () => {
     refetch();

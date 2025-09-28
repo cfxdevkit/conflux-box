@@ -63,4 +63,30 @@ export class RPCClient {
     
     return { core, evm };
   }
+
+  static getRpcUrls(network: 'local' | 'testnet' | 'mainnet' = 'local') {
+    switch (network) {
+      case 'testnet':
+        return {
+          core: 'https://test.confluxrpc.com',
+          evm: 'https://evmtestnet.confluxrpc.com',
+        };
+      case 'mainnet':
+        return {
+          core: 'https://main.confluxrpc.com',
+          evm: 'https://evm.confluxrpc.com',
+        };
+      case 'local':
+      default:
+        return {
+          core: 'http://localhost:12537',
+          evm: 'http://localhost:8545',
+        };
+    }
+  }
+
+  static async fetchBlockNumbersByNetwork(network: 'local' | 'testnet' | 'mainnet' = 'local'): Promise<{ core: number | null; evm: number | null }> {
+    const urls = this.getRpcUrls(network);
+    return this.fetchBothBlockNumbers(urls.core, urls.evm);
+  }
 }

@@ -28,17 +28,27 @@ import { useAutoDevKitStatus, useCurrentNetwork, useStartNode, useStopNode, useB
 export default function Dashboard() {
   const { data: status, isLoading, refetch } = useAutoDevKitStatus();
   const { data: currentNetworkData } = useCurrentNetwork();
-  const { data: blockNumbers } = useBlockNumbers(currentNetworkData?.network === 'local');
   const startNodeMutation = useStartNode();
   const stopNodeMutation = useStopNode();
 
   const currentNetwork = currentNetworkData?.network || 'local';
   const nodeRunning = status?.running || false;
   
-  // Get Core block number from status or RPC, show "---" when node is stopped
-  const coreBlockNumber = nodeRunning 
-    ? (status?.network?.blockNumber ?? blockNumbers?.core ?? '---')
-    : '---';
+  // Fetch block numbers for the current network
+  const { data: blockNumbers } = useBlockNumbers(currentNetwork as 'local' | 'testnet' | 'mainnet');
+  
+  // Get Core block number based on network type
+  let coreBlockNumber: string | number = '---';
+  
+  if (currentNetwork === 'local') {
+    // For local: show block number only when node is running
+    coreBlockNumber = nodeRunning 
+      ? (status?.network?.blockNumber ?? blockNumbers?.core ?? '---')
+      : '---';
+  } else {
+    // For testnet/mainnet: always try to show block number from RPC
+    coreBlockNumber = blockNumbers?.core ?? '---';
+  }
 
   const stats = [
     {
@@ -63,7 +73,7 @@ export default function Dashboard() {
       title: 'Core Block Number',
       value: coreBlockNumber,
       icon: IconNetwork,
-      color: nodeRunning ? 'orange' : 'gray',
+      color: coreBlockNumber !== '---' ? 'orange' : 'gray',
     },
   ];
 

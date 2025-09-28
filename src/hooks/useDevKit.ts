@@ -70,10 +70,10 @@ export function useAccountBalance(index: number) {
 }
 
 // Hook for real-time block numbers
-export function useBlockNumbers(enabled = true) {
+export function useBlockNumbers(network: 'local' | 'testnet' | 'mainnet' = 'local', enabled = true) {
   return useQuery({
-    queryKey: ['block-numbers'],
-    queryFn: () => RPCClient.fetchBothBlockNumbers(),
+    queryKey: ['block-numbers', network],
+    queryFn: () => RPCClient.fetchBlockNumbersByNetwork(network),
     enabled,
     refetchInterval: 5000, // Refresh every 5 seconds
   });
