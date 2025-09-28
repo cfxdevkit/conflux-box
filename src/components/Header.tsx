@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not required in newer JSX setups
 import { Group, Badge, Title } from '@mantine/core';
 import { ConnectButton } from './ConnectButton';
 import { NetworkDropdown } from './NetworkDropdown';

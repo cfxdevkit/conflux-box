@@ -23,7 +23,6 @@ import {
   IconCode,
   IconEye,
   IconEdit,
-  IconRefresh,
 } from '@tabler/icons-react';
 import { useReadContract, useWriteContract, useAccounts } from '../hooks/useDevKit';
 

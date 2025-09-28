@@ -30,7 +30,7 @@ export function WagmiProviderWrapper({ children }: WagmiProviderWrapperProps) {
           options={{
             initialChainId: config.chains[0].id,
             disclaimer: 'By connecting your wallet, you agree to use Conflux DevKit for development purposes.',
-            hideBalance: false,
+            hideBalance: true,
             hideTooltips: false,
             hideQuestionMarkCTA: false,
             hideNoWalletCTA: false,

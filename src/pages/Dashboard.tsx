@@ -173,7 +173,7 @@ export default function Dashboard() {
             {currentNetwork !== 'local' && (
               <>
                 <Divider my="md" />
-                <Alert icon={<IconAlertCircle size={16} />} color="blue" size="sm">
+                <Alert icon={<IconAlertCircle size={16} />} color="blue">
                   <Text size="sm">
                     Connected to remote {currentNetwork} network. RPC health monitoring available.
                   </Text>

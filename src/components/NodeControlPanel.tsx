@@ -11,7 +11,7 @@ import {
   Alert,
   Divider,
   Grid,
-  Progress,
+  // Progress,
 } from '@mantine/core';
 import {
   IconPlayerPlay,

@@ -16,7 +16,6 @@ import {
   IconRefresh,
 } from '@tabler/icons-react';
 import { DevKitAccountManager } from '../components/DevKitAccountManager';
-import { useUpdateDevSettings } from '../hooks/useDevKit';
 
 export default function Settings() {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ConnectKitButton } from 'connectkit';
-import { Button, Group, Text, Badge, Card, Stack } from '@mantine/core';
-import { IconWallet, IconChevronDown } from '@tabler/icons-react';
+import { Button, Group, Badge } from '@mantine/core';
+import { IconWallet } from '@tabler/icons-react';
 import { useAccount, useSignMessage, useDisconnect } from 'wagmi';
 import { useAuthStore } from '../stores/authStore';
 
@@ -39,9 +39,10 @@ export function ConnectButton({ size = 'sm', variant = 'filled' }: ConnectButton
   }, [connect, signMessageAsync]);
 
   // Handle logout with wallet disconnection
-  const handleLogout = React.useCallback(() => {
+  const handleLogout = React.useCallback((hide?: () => void) => {
     disconnect();
     wagmiDisconnect();
+    hide?.();
   }, [disconnect, wagmiDisconnect]);
 
   // Auto-authenticate when wallet connects (but not if user previously refused)
@@ -93,7 +94,7 @@ export function ConnectButton({ size = 'sm', variant = 'filled' }: ConnectButton
                 size={size}
                 variant="subtle"
                 color="red"
-                onClick={handleLogout}
+                onClick={() => handleLogout()}
               >
                 Disconnect
               </Button>

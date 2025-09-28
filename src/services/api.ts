@@ -1,8 +1,11 @@
 // API service for communicating with DevKit Backend Core - Copied from original working pattern
 import axios from 'axios';
 
-// Use direct localhost URL for development
-const API_BASE_URL = 'http://localhost:3001/api';
+// Use Vite proxy in development (/api -> localhost:3001) and an env-provided URL in production
+const _env = (import.meta as any).env || {};
+const API_BASE_URL = _env.PROD
+  ? _env.VITE_API_BASE_URL || 'http://localhost:3001/api'
+  : '/api';
 
 // Create axios instance with default config
 const api = axios.create({

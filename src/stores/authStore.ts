@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     try {
       // Step 1: Get authentication challenge
-      const challengeResponse = await fetch('http://localhost:3001/api/auth/challenge', {
+  const challengeResponse = await fetch('/api/auth/challenge', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const signature = await signMessage(challenge.message);
 
       // Step 3: Verify signature and get session
-      const verifyResponse = await fetch('http://localhost:3001/api/auth/verify', {
+  const verifyResponse = await fetch('/api/auth/verify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

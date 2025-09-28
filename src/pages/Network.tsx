@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Stack,
   Title,
@@ -7,14 +6,13 @@ import {
   Group,
   Badge,
   Button,
-  Switch,
+  // Switch not used here
   Grid,
 } from '@mantine/core';
 import {
   IconRefresh,
-  IconSettings,
 } from '@tabler/icons-react';
-import { type NetworkType } from '../components/NetworkDropdown';
+// type NetworkType not used here
 import { NodeControlPanel } from '../components/NodeControlPanel';
 import { useDevKitStatus, useCurrentNetwork } from '../hooks/useDevKit';
 

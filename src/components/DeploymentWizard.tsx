@@ -10,18 +10,14 @@ import {
   Text,
   Card,
   Badge,
-  Code,
-  Textarea,
+  // Code,
   NumberInput,
   Alert,
   Switch,
   JsonInput,
 } from '@mantine/core';
 import {
-  IconCode,
-  IconSettings,
   IconRocket,
-  IconAlertCircle,
   IconCheck,
 } from '@tabler/icons-react';
 import { ContractTemplate, contractTemplates } from '../data/contractTemplates';
@@ -183,7 +179,7 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
       size="lg"
       centered
     >
-      <Stepper active={activeStep} breakpoint="sm">
+  <Stepper active={activeStep}>
         <Stepper.Step label="Select" description="Choose contract type">
           <Stack gap="md">
             {!selectedTemplate && (
