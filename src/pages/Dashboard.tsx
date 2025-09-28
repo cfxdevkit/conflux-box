@@ -23,10 +23,10 @@ import {
   IconPlayerStop,
   IconAlertCircle
 } from '@tabler/icons-react';
-import { useDevKitStatus, useCurrentNetwork, useStartNode, useStopNode } from '../hooks/useDevKit';
+import { useAutoDevKitStatus, useCurrentNetwork, useStartNode, useStopNode } from '../hooks/useDevKit';
 
 export default function Dashboard() {
-  const { data: status, isLoading, refetch } = useDevKitStatus();
+  const { data: status, isLoading, refetch } = useAutoDevKitStatus();
   const { data: currentNetworkData } = useCurrentNetwork();
   const startNodeMutation = useStartNode();
   const stopNodeMutation = useStopNode();

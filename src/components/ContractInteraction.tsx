@@ -24,7 +24,7 @@ import {
   IconEye,
   IconEdit,
 } from '@tabler/icons-react';
-import { useReadContract, useWriteContract, useAccounts } from '../hooks/useDevKit';
+import { useReadContract, useWriteContract, useAutoAccounts } from '../hooks/useDevKit';
 
 interface ContractInfo {
   address: string;
@@ -47,8 +47,8 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
 
   const readContract = useReadContract();
   const writeContract = useWriteContract();
-  const { data: accountsData } = useAccounts();
-  const accounts = accountsData?.accounts || [];
+  const { data: accountsData } = useAutoAccounts();
+  const accounts = Array.isArray(accountsData) ? accountsData : (accountsData?.accounts || []);
 
   const readFunctions = contract.abi.filter(
     (func) => func.type === 'function' && (func.stateMutability === 'view' || func.stateMutability === 'pure')

@@ -1,13 +1,13 @@
 import { Menu, Button, Group, Text, Badge, Loader, Alert } from '@mantine/core';
 import { IconNetwork, IconChevronDown, IconLock, IconCheck } from '@tabler/icons-react';
-import { useCurrentNetwork, useSwitchNetwork, useDevKitStatus } from '../hooks/useDevKit';
+import { useCurrentNetwork, useSwitchNetwork, useAutoDevKitStatus } from '../hooks/useDevKit';
 import { notifications } from '@mantine/notifications';
 
 export type NetworkType = 'local' | 'testnet' | 'mainnet';
 
 export function NetworkDropdown() {
   const { data: currentNetworkData } = useCurrentNetwork();
-  const { data: devkitStatus } = useDevKitStatus();
+  const { data: devkitStatus } = useAutoDevKitStatus();
   const switchNetworkMutation = useSwitchNetwork();
 
   const currentNetwork = currentNetworkData?.network || 'local';

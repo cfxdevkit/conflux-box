@@ -23,13 +23,13 @@ import {
   IconCheck,
   IconInfoCircle,
 } from '@tabler/icons-react';
-import { useSignWithDevKitAccount, useAccounts } from '../hooks/useDevKit';
+import { useSignWithDevKitAccount, useAutoAccounts } from '../hooks/useDevKit';
 import { useAuthStore } from '../stores/authStore';
 import { notifications } from '@mantine/notifications';
 
 export function DevKitAccountManager() {
   const { isConnected } = useAuthStore();
-  const { data: accounts } = useAccounts();
+  const { data: accounts } = useAutoAccounts();
   const signMutation = useSignWithDevKitAccount();
   
   const [selectedAccount, setSelectedAccount] = React.useState<string>('0');
@@ -119,7 +119,7 @@ export function DevKitAccountManager() {
                 value={selectedAccount}
                 onChange={(value) => setSelectedAccount(value || '0')}
                 data={
-                  accounts
+                  Array.isArray(accounts)
                     ? accounts.map((account: any, index: number) => ({
                         value: index.toString(),
                         label: `Account ${index} (${account.address?.slice(0, 10)}...)`,

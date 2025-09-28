@@ -18,11 +18,11 @@ import {
   IconPlus,
   IconRefresh,
 } from '@tabler/icons-react';
-import { useAccounts } from '../hooks/useDevKit';
+import { useAutoAccounts } from '../hooks/useDevKit';
 
 export default function Accounts() {
-  const { data: accountsData, isLoading, refetch } = useAccounts();
-  const accounts = accountsData?.accounts || [];
+  const { data: accountsData, isLoading, refetch } = useAutoAccounts();
+  const accounts = Array.isArray(accountsData) ? accountsData : (accountsData?.accounts || []);
 
   return (
     <Stack>

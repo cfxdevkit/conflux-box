@@ -1,12 +1,15 @@
 // DevKit hooks - Enhanced version with full API integration
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DevKitApiService } from '../services/api';
+import { handleApiError } from '../utils/errorHandling';
+import { useAuthStore } from '../stores/authStore';
 
 // Hook for DevKit status
-export function useDevKitStatus() {
+export function useDevKitStatus(enabled = true) {
   return useQuery({
     queryKey: ['devkit-status'],
     queryFn: DevKitApiService.getDevKitStatus,
+    enabled,
     refetchInterval: 5000, // Refresh every 5 seconds
   });
 }
@@ -21,12 +24,28 @@ export function usePublicStatus() {
 }
 
 // Hook for accounts
-export function useAccounts() {
+export function useAccounts(enabled = true) {
   return useQuery({
     queryKey: ['devkit-accounts'],
     queryFn: DevKitApiService.getAllAccounts,
+    enabled,
     refetchInterval: 10000, // Refresh every 10 seconds
   });
+}
+
+// Auth-aware helpers: components should use these to automatically select public vs authenticated endpoints
+export function useAutoDevKitStatus() {
+  const isAuthenticated = useAuthStore((s) => s.isConnected);
+  // If authenticated use private status, otherwise use public status
+  return isAuthenticated
+    ? useDevKitStatus(true)
+    : usePublicStatus();
+}
+
+export function useAutoAccounts() {
+  const isAuthenticated = useAuthStore((s) => s.isConnected);
+  // Only fetch accounts when authenticated
+  return useAccounts(isAuthenticated);
 }
 
 // Hook for specific account
@@ -58,6 +77,9 @@ export function useStartNode() {
       queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
       queryClient.invalidateQueries({ queryKey: ['public-status'] });
     },
+    onError: (error: any) => {
+      handleApiError(error as any, 'Failed to start node');
+    },
   });
 }
 
@@ -68,6 +90,9 @@ export function useStopNode() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
       queryClient.invalidateQueries({ queryKey: ['public-status'] });
+    },
+    onError: (error: any) => {
+      handleApiError(error as any, 'Failed to stop node');
     },
   });
 }

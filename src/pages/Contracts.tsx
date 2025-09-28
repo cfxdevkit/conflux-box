@@ -20,7 +20,7 @@ import {
   IconPlayerPlay,
   IconTemplate,
 } from '@tabler/icons-react';
-import { useDevKitStatus, useCurrentNetwork, useStartNode } from '../hooks/useDevKit';
+import { useAutoDevKitStatus, useCurrentNetwork, useStartNode } from '../hooks/useDevKit';
 import { DeploymentWizard } from '../components/DeploymentWizard';
 import { ContractInteraction } from '../components/ContractInteraction';
 import { contractTemplates, ContractTemplate } from '../data/contractTemplates';
@@ -34,7 +34,7 @@ interface DeployedContract {
 }
 
 export default function Contracts() {
-  const { data: devkitStatus } = useDevKitStatus();
+  const { data: devkitStatus } = useAutoDevKitStatus();
   const { data: currentNetworkData } = useCurrentNetwork();
   const startNodeMutation = useStartNode();
 

@@ -14,10 +14,10 @@ import {
 } from '@tabler/icons-react';
 // type NetworkType not used here
 import { NodeControlPanel } from '../components/NodeControlPanel';
-import { useDevKitStatus, useCurrentNetwork } from '../hooks/useDevKit';
+import { useAutoDevKitStatus, useCurrentNetwork } from '../hooks/useDevKit';
 
 export default function Network() {
-  const { data: devkitStatus, refetch } = useDevKitStatus();
+  const { data: devkitStatus, refetch } = useAutoDevKitStatus();
   const { data: currentNetworkData, refetch: refetchNetwork } = useCurrentNetwork();
 
   const currentNetwork = currentNetworkData?.network || 'local';

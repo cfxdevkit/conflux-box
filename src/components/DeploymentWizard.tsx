@@ -21,7 +21,7 @@ import {
   IconCheck,
 } from '@tabler/icons-react';
 import { ContractTemplate, contractTemplates } from '../data/contractTemplates';
-import { useDeployContract, useAccounts } from '../hooks/useDevKit';
+import { useDeployContract, useAutoAccounts } from '../hooks/useDevKit';
 
 interface DeploymentWizardProps {
   opened: boolean;
@@ -47,8 +47,8 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
   const [deployToBoth, setDeployToBoth] = useState(true);
 
   const deployContract = useDeployContract();
-  const { data: accountsData } = useAccounts();
-  const accounts = accountsData?.accounts || [];
+  const { data: accountsData } = useAutoAccounts();
+  const accounts = Array.isArray(accountsData) ? accountsData : (accountsData?.accounts || []);
 
   const nextStep = () => setActiveStep((current) => Math.min(current + 1, 3));
   const prevStep = () => setActiveStep((current) => Math.max(current - 1, 0));
