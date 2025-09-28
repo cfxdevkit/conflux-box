@@ -13,6 +13,7 @@ import {
   IconNetwork,
   IconSettings,
   IconWallet,
+  IconCurrencyDollar,
 } from "@tabler/icons-react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "./components/Header";
@@ -20,6 +21,7 @@ import Accounts from "./pages/Accounts";
 import Contracts from "./pages/Contracts";
 import Dashboard from "./pages/Dashboard";
 import Network from "./pages/Network";
+import Protocols from "./pages/Protocols";
 import Settings from "./pages/Settings";
 import { useWebSocket } from "./services/websocket";
 
@@ -27,6 +29,7 @@ const navigation = [
   { label: "Dashboard", icon: IconHome, path: "/" },
   { label: "Accounts", icon: IconWallet, path: "/accounts" },
   { label: "Contracts", icon: IconCode, path: "/contracts" },
+  { label: "Protocols", icon: IconCurrencyDollar, path: "/protocols" },
   { label: "Node Control", icon: IconNetwork, path: "/network" },
   { label: "Settings", icon: IconSettings, path: "/settings" },
 ];
@@ -90,6 +93,7 @@ export default function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/accounts" element={<Accounts />} />
             <Route path="/contracts" element={<Contracts />} />
+            <Route path="/protocols" element={<Protocols />} />
             <Route path="/network" element={<Network />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
