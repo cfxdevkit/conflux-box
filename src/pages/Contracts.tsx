@@ -51,7 +51,9 @@ export default function Contracts() {
     const saved = localStorage.getItem('deployedContracts');
     if (saved) {
       try {
-        setDeployedContracts(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) setDeployedContracts(parsed);
+        else console.warn('deployedContracts in localStorage is not an array, ignoring');
       } catch (error) {
         console.error('Failed to parse deployed contracts:', error);
       }
@@ -129,6 +131,18 @@ export default function Contracts() {
           opened={wizardOpened}
           onClose={() => setWizardOpened(false)}
           selectedTemplate={selectedTemplate}
+          onDeploymentSuccess={(contracts) => {
+            // Append new contracts (avoid duplicates by address+chain)
+            setDeployedContracts((prev) => {
+              const combined = [...prev];
+              contracts.forEach((c) => {
+                const exists = combined.some((x) => x.address === c.address && x.chain === c.chain);
+                if (!exists) combined.push(c);
+              });
+              return combined;
+            });
+            setWizardOpened(false);
+          }}
         />
       </Stack>
     );
