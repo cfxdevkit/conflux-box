@@ -16,7 +16,7 @@ import {
   IconCurrencyDollar,
   IconArrowsExchange,
   IconInfoCircle,
-  IconBridge,
+  IconTransfer,
 } from '@tabler/icons-react';
 import { useCurrentNetwork } from '../hooks/useDevKit';
 
@@ -45,7 +45,7 @@ const protocols: ProtocolInfo[] = [
   {
     name: 'Meson',
     description: 'Ultra-fast cross-chain bridge with atomic swaps',
-    icon: IconBridge,
+    icon: IconTransfer,
     color: 'green',
     url: 'https://meson.fi/conflux',
     networks: ['mainnet'],
