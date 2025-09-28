@@ -10,7 +10,6 @@ import {
   Text,
   Card,
   Badge,
-  // Code,
   NumberInput,
   Alert,
   Switch,
@@ -112,6 +111,10 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
           accountIndex,
         });
 
+        // Debug: log raw API responses
+        // eslint-disable-next-line no-console
+        console.debug('Deployment results:', { coreResult, evmResult });
+
         if (coreResult?.address) {
           deployedContracts.push({
             address: coreResult.address,
@@ -140,6 +143,10 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
           accountIndex,
         });
 
+        // Debug: log raw API response
+        // eslint-disable-next-line no-console
+        console.debug('Deployment single-chain result:', { result });
+
         if (result?.address) {
           deployedContracts.push({
             address: result.address,
@@ -150,6 +157,10 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
           });
         }
       }
+
+      // Debug final constructed array
+      // eslint-disable-next-line no-console
+      console.debug('Final deployedContracts array:', deployedContracts);
 
       // Notify parent component of successful deployment
       if (deployedContracts.length > 0 && onDeploymentSuccess) {
@@ -179,7 +190,7 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
       size="lg"
       centered
     >
-  <Stepper active={activeStep}>
+      <Stepper active={activeStep}>
         <Stepper.Step label="Select" description="Choose contract type">
           <Stack gap="md">
             {!selectedTemplate && (

@@ -178,10 +178,15 @@ export class DevKitApiService {
     args: any[] = [],
     chain: 'core' | 'evm' = 'core'
   ) {
+    // Client-side validation to avoid backend 400 responses and give clearer error messages
+    if (!address || !abi || !method) {
+      throw new Error('Address, ABI, and function name are required');
+    }
+
     const response = await api.post('/devkit/contracts/read', {
       address,
       abi,
-      method,
+      functionName: method,
       args,
       chain,
     });
@@ -196,10 +201,14 @@ export class DevKitApiService {
     chain: 'core' | 'evm' = 'core',
     accountIndex: number = 0
   ) {
+    if (!address || !abi || !method) {
+      throw new Error('Address, ABI, and function name are required');
+    }
+
     const response = await api.post('/devkit/contracts/write', {
       address,
       abi,
-      method,
+      functionName: method,
       args,
       chain,
       accountIndex,

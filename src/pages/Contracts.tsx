@@ -70,6 +70,18 @@ export default function Contracts() {
     setWizardOpened(true);
   };
 
+  const handleDeploymentSuccess = (contracts: DeployedContract[]) => {
+    setDeployedContracts((prev) => {
+      const combined = [...prev];
+      contracts.forEach((c) => {
+        const exists = combined.some((x) => x.address === c.address && x.chain === c.chain);
+        if (!exists) combined.push(c);
+      });
+      return combined;
+    });
+    setWizardOpened(false);
+  };
+
   const handleTemplateQuickDeploy = (template: ContractTemplate) => {
     openWizard(template);
   };
@@ -242,11 +254,12 @@ export default function Contracts() {
         </Tabs.Panel>
       </Tabs>
 
-      <DeploymentWizard
-        opened={wizardOpened}
-        onClose={() => setWizardOpened(false)}
-        selectedTemplate={selectedTemplate}
-      />
+        <DeploymentWizard
+          opened={wizardOpened}
+          onClose={() => setWizardOpened(false)}
+          selectedTemplate={selectedTemplate}
+          onDeploymentSuccess={handleDeploymentSuccess}
+        />
     </Stack>
   );
 }

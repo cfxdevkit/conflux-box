@@ -44,6 +44,7 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
   const [functionArgs, setFunctionArgs] = useState<Record<string, any>>({});
   const [accountIndex, setAccountIndex] = useState(0);
   const [readResult, setReadResult] = useState<any>(null);
+  const [callError, setCallError] = useState<string | null>(null);
 
   const readContract = useReadContract();
   const writeContract = useWriteContract();
@@ -61,7 +62,16 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
   const selectedFunc = contract.abi.find(func => func.name === selectedFunction);
 
   const handleFunctionCall = async (isWrite: boolean) => {
-    if (!selectedFunc) return;
+    setCallError(null);
+    if (!selectedFunc) {
+      setCallError('No function selected');
+      return;
+    }
+
+    if (!contract.address || !contract.abi || !selectedFunction) {
+      setCallError('Address, ABI, and function name are required');
+      return;
+    }
 
     try {
       const args = selectedFunc.inputs?.map((input: any) => {
@@ -91,8 +101,9 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
         });
         setReadResult(result);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Contract call failed:', error);
+      setCallError(error?.message || String(error));
     }
   };
 
@@ -215,6 +226,12 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
                   Clear
                 </Button>
               </Group>
+
+              {callError && (
+                <Alert color="red" title="Call Failed">
+                  {callError}
+                </Alert>
+              )}
 
               {readResult !== null && (
                 <Alert color="green" title="Result">
