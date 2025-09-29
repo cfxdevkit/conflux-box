@@ -90,3 +90,85 @@ TODO / Extensions
 - Document error payloads and common failure cases per endpoint.
 
 End of API reference (high-level). For precise parameter names and types, see `src/services/api.ts`.
+
+Common curl examples
+--------------------
+
+Notes about auth/session
+- The frontend stores a session token in localStorage under `devkit_session` and sends it as a Bearer token in `Authorization` header. To call the API with curl, set the `Authorization` header to `Bearer <session>`.
+
+1) Health check
+
+curl -s -X GET http://localhost:12537/health
+
+2) Get public status
+
+curl -s -X GET http://localhost:12537/status/public
+
+3) List accounts
+
+curl -s -X GET http://localhost:12537/accounts \
+  -H "Authorization: Bearer <SESSION_TOKEN>"
+
+4) Get account balance
+
+curl -s -X GET http://localhost:12537/accounts/0xYOURADDRESS/balance \
+  -H "Authorization: Bearer <SESSION_TOKEN>"
+
+5) Deploy a contract
+
+curl -s -X POST http://localhost:12537/contracts/deploy \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -d '{"abi": [...], "bytecode":"0x...", "from":"0xSENDER", "constructorArgs": []}'
+
+6) Read a contract (call)
+
+curl -s -X POST http://localhost:12537/contracts/read \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -d '{"to":"0xCONTRACT", "abi": [...], "method":"balanceOf", "args":["0xADDRESS"]}'
+
+7) Send a transaction
+
+curl -s -X POST http://localhost:12537/transactions/send \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -d '{"from":"0xSENDER","to":"0xRECIPIENT","value":"0xDE0B6B3A7640000"}'
+
+8) Start the local node
+
+curl -s -X POST http://localhost:12537/node/start \
+  -H "Authorization: Bearer <SESSION_TOKEN>"
+
+9) Start mining
+
+curl -s -X POST http://localhost:12537/mining/start \
+  -H "Authorization: Bearer <SESSION_TOKEN>"
+
+10) Mine N blocks immediately
+
+curl -s -X POST http://localhost:12537/mining/mine-blocks \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -d '{"count":5}'
+
+11) Switch network
+
+curl -s -X POST http://localhost:12537/network/switch \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -d '{"network":"local"}'
+
+12) Sign a payload with devkit account
+
+curl -s -X POST http://localhost:12537/accounts/sign \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SESSION_TOKEN>" \
+  -d '{"address":"0xACCOUNT","payload":"0x..."}'
+
+Quick tips
+- Replace `http://localhost:12537` with the actual backend base URL when running in Codespaces or deployed environments.
+- Use a real session token from the frontend (inspect browser localStorage for `devkit_session`) or use any login flow provided by the backend to obtain one.
+- When posting large JSON (ABIs, bytecode), use `--data-binary @file.json` to avoid shell quoting issues.
+
