@@ -11,7 +11,7 @@
       ]
     }
   },
-  "forwardPorts": [3000, 5173, 9229],
+  "forwardPorts": [3000, 3001, 3002],
   "postCreateCommand": "npm i -g pnpm@8 && pnpm install",
   "features": {}
 }
