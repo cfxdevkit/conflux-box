@@ -1,14 +1,14 @@
 /**
  * Integration Framework for Conflux DevKit
- * 
+ *
  * Modular system for DeFi protocol integrations that allows easy addition
  * of new protocols and network-specific filtering.
  */
 
-import React from 'react';
+import React from "react";
 
-export type NetworkType = 'local' | 'testnet' | 'mainnet';
-export type IntegrationType = 'dex' | 'bridge' | 'lending' | 'yield' | 'tools';
+export type NetworkType = "local" | "testnet" | "mainnet";
+export type IntegrationType = "dex" | "bridge" | "lending" | "yield" | "tools";
 
 export interface IntegrationMetadata {
   id: string;
@@ -58,21 +58,22 @@ export class IntegrationRegistry {
   }
 
   getIntegrationsForNetwork(network: NetworkType): Integration[] {
-    return this.getAllIntegrations().filter(integration => 
-      integration.metadata.networks.includes(network) ||
-      integration.metadata.networks.includes('local') && network === 'local'
+    return this.getAllIntegrations().filter(
+      (integration) =>
+        integration.metadata.networks.includes(network) ||
+        (integration.metadata.networks.includes("local") && network === "local")
     );
   }
 
   getIntegrationsByCategory(category: IntegrationType): Integration[] {
-    return this.getAllIntegrations().filter(integration => 
-      integration.metadata.category === category
+    return this.getAllIntegrations().filter(
+      (integration) => integration.metadata.category === category
     );
   }
 
   getActiveIntegrations(): Integration[] {
-    return this.getAllIntegrations().filter(integration => 
-      integration.metadata.isActive
+    return this.getAllIntegrations().filter(
+      (integration) => integration.metadata.isActive
     );
   }
 }

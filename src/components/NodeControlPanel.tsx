@@ -1,31 +1,30 @@
-import React from 'react';
 import {
-  Card,
-  Title,
-  Stack,
-  Group,
-  Button,
-  Badge,
-  Text,
-  NumberInput,
   Alert,
+  Badge,
+  Button,
+  Card,
   Divider,
   Grid,
-  // Progress,
-} from '@mantine/core';
+  Group,
+  NumberInput,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import {
+  IconActivity,
+  IconClock,
   IconPlayerPlay,
   IconPlayerStop,
   IconSettings,
-  IconTool,
-  IconClock,
   IconShield,
-  IconActivity,
-} from '@tabler/icons-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DevKitApiService } from '../services/api';
-import { useAuthStore } from '../stores/authStore';
-import { handleApiError, handleApiSuccess } from '../utils/errorHandling';
+  IconTool,
+} from "@tabler/icons-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { DevKitApiService } from "../services/api";
+import { useAuthStore } from "../stores/authStore";
+import { handleApiError, handleApiSuccess } from "../utils/errorHandling";
 
 interface NodeControlPanelProps {
   currentMiningStatus?: {
@@ -34,7 +33,7 @@ interface NodeControlPanelProps {
     blocksMined: number;
   };
   nodeRunning: boolean;
-  networkType: 'local' | 'testnet' | 'mainnet';
+  networkType: "local" | "testnet" | "mainnet";
 }
 
 export function NodeControlPanel({
@@ -50,7 +49,7 @@ export function NodeControlPanel({
   const [blocksToMine, setBlocksToMine] = React.useState(1);
 
   // Show alert if not local network
-  if (networkType !== 'local') {
+  if (networkType !== "local") {
     return (
       <Card withBorder padding="lg" radius="md">
         <Title order={4} mb="md">
@@ -61,9 +60,9 @@ export function NodeControlPanel({
         </Title>
         <Alert color="blue">
           <Text size="sm">
-            You are connected to <strong>{networkType}</strong> network.
-            Node control is only available for local DevKit instances.
-            This will show health checks for remote blockchain nodes.
+            You are connected to <strong>{networkType}</strong> network. Node
+            control is only available for local DevKit instances. This will show
+            health checks for remote blockchain nodes.
           </Text>
         </Alert>
 
@@ -71,15 +70,21 @@ export function NodeControlPanel({
         <Stack gap="sm" mt="md">
           <Group justify="space-between">
             <Text size="sm">Core Space RPC</Text>
-            <Badge color="green" size="sm">Healthy</Badge>
+            <Badge color="green" size="sm">
+              Healthy
+            </Badge>
           </Group>
           <Group justify="space-between">
             <Text size="sm">eSpace RPC</Text>
-            <Badge color="green" size="sm">Healthy</Badge>
+            <Badge color="green" size="sm">
+              Healthy
+            </Badge>
           </Group>
           <Group justify="space-between">
             <Text size="sm">Latest Block</Text>
-            <Text size="sm" ff="monospace">12,345,678</Text>
+            <Text size="sm" ff="monospace">
+              12,345,678
+            </Text>
           </Group>
         </Stack>
       </Card>
@@ -90,44 +95,44 @@ export function NodeControlPanel({
   const startNodeMutation = useMutation({
     mutationFn: DevKitApiService.startNode,
     onSuccess: () => {
-      handleApiSuccess('Node started successfully');
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      handleApiSuccess("Node started successfully");
+      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
     },
     onError: (error) => {
-      handleApiError(error as any, 'Failed to start node');
+      handleApiError(error as any, "Failed to start node");
     },
   });
 
   const stopNodeMutation = useMutation({
     mutationFn: DevKitApiService.stopNode,
     onSuccess: () => {
-      handleApiSuccess('Node stopped successfully');
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      handleApiSuccess("Node stopped successfully");
+      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
     },
     onError: (error) => {
-      handleApiError(error as any, 'Failed to stop node');
+      handleApiError(error as any, "Failed to stop node");
     },
   });
 
   const startMiningMutation = useMutation({
     mutationFn: DevKitApiService.startMining,
     onSuccess: () => {
-      handleApiSuccess('Mining started successfully');
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      handleApiSuccess("Mining started successfully");
+      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
     },
     onError: (error) => {
-      handleApiError(error as any, 'Failed to start mining');
+      handleApiError(error as any, "Failed to start mining");
     },
   });
 
   const stopMiningMutation = useMutation({
     mutationFn: DevKitApiService.stopMining,
     onSuccess: () => {
-      handleApiSuccess('Mining stopped successfully');
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      handleApiSuccess("Mining stopped successfully");
+      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
     },
     onError: (error) => {
-      handleApiError(error as any, 'Failed to stop mining');
+      handleApiError(error as any, "Failed to stop mining");
     },
   });
 
@@ -135,10 +140,10 @@ export function NodeControlPanel({
     mutationFn: DevKitApiService.setMiningInterval,
     onSuccess: () => {
       handleApiSuccess(`Mining interval set to ${miningInterval}ms`);
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
     },
     onError: (error) => {
-      handleApiError(error as any, 'Failed to update mining interval');
+      handleApiError(error as any, "Failed to update mining interval");
     },
   });
 
@@ -146,10 +151,10 @@ export function NodeControlPanel({
     mutationFn: DevKitApiService.mineBlocks,
     onSuccess: () => {
       handleApiSuccess(`Successfully mined ${blocksToMine} blocks`);
-      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
     },
     onError: (error) => {
-      handleApiError(error as any, 'Failed to mine blocks');
+      handleApiError(error as any, "Failed to mine blocks");
     },
   });
 
@@ -181,7 +186,9 @@ export function NodeControlPanel({
       <Stack gap="md">
         {/* Node Operations */}
         <div>
-          <Text size="sm" fw={500} mb="xs">Node Operations</Text>
+          <Text size="sm" fw={500} mb="xs">
+            Node Operations
+          </Text>
           <Group gap="xs">
             <Button
               leftSection={<IconPlayerPlay size={16} />}
@@ -191,7 +198,7 @@ export function NodeControlPanel({
               onClick={() => startNodeMutation.mutate()}
               loading={startNodeMutation.isPending}
             >
-              {nodeRunning ? 'Node Running' : 'Start Node'}
+              {nodeRunning ? "Node Running" : "Start Node"}
             </Button>
             <Button
               leftSection={<IconPlayerStop size={16} />}
@@ -209,7 +216,9 @@ export function NodeControlPanel({
 
         {/* Mining Controls */}
         <div>
-          <Text size="sm" fw={500} mb="xs">Mining Controls</Text>
+          <Text size="sm" fw={500} mb="xs">
+            Mining Controls
+          </Text>
           <Stack gap="sm">
             <Group gap="xs">
               <Button
@@ -225,7 +234,9 @@ export function NodeControlPanel({
                 onClick={() => startMiningMutation.mutate()}
                 loading={startMiningMutation.isPending}
               >
-                {currentMiningStatus?.isRunning ? 'Mining Active' : 'Start Mining'}
+                {currentMiningStatus?.isRunning
+                  ? "Mining Active"
+                  : "Start Mining"}
               </Button>
               <Button
                 leftSection={<IconPlayerStop size={16} />}
@@ -295,30 +306,42 @@ export function NodeControlPanel({
           <>
             <Divider />
             <div>
-              <Text size="sm" fw={500} mb="xs">Mining Status</Text>
+              <Text size="sm" fw={500} mb="xs">
+                Mining Status
+              </Text>
               <Card withBorder padding="sm" bg="gray.0">
                 <Grid>
                   <Grid.Col span={6}>
                     <Group justify="space-between">
-                      <Text size="xs" c="dimmed">Status:</Text>
+                      <Text size="xs" c="dimmed">
+                        Status:
+                      </Text>
                       <Badge
                         size="xs"
-                        color={currentMiningStatus.isRunning ? 'green' : 'gray'}
+                        color={currentMiningStatus.isRunning ? "green" : "gray"}
                       >
-                        {currentMiningStatus.isRunning ? 'Running' : 'Stopped'}
+                        {currentMiningStatus.isRunning ? "Running" : "Stopped"}
                       </Badge>
                     </Group>
                   </Grid.Col>
                   <Grid.Col span={6}>
                     <Group justify="space-between">
-                      <Text size="xs" c="dimmed">Interval:</Text>
-                      <Text size="xs" ff="monospace">{currentMiningStatus.interval}ms</Text>
+                      <Text size="xs" c="dimmed">
+                        Interval:
+                      </Text>
+                      <Text size="xs" ff="monospace">
+                        {currentMiningStatus.interval}ms
+                      </Text>
                     </Group>
                   </Grid.Col>
                   <Grid.Col span={12}>
                     <Group justify="space-between">
-                      <Text size="xs" c="dimmed">Blocks Mined:</Text>
-                      <Text size="xs" fw={500}>{currentMiningStatus.blocksMined}</Text>
+                      <Text size="xs" c="dimmed">
+                        Blocks Mined:
+                      </Text>
+                      <Text size="xs" fw={500}>
+                        {currentMiningStatus.blocksMined}
+                      </Text>
                     </Group>
                   </Grid.Col>
                 </Grid>

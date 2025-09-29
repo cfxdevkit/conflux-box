@@ -9,11 +9,11 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconCode,
+  IconCurrencyDollar,
   IconHome,
   IconNetwork,
   IconSettings,
   IconWallet,
-  IconCurrencyDollar,
 } from "@tabler/icons-react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "./components/Header";

@@ -1,64 +1,74 @@
-import { useState } from 'react';
 import {
-  Modal,
-  Stepper,
+  Alert,
+  Badge,
   Button,
+  Card,
   Group,
-  TextInput,
+  JsonInput,
+  Modal,
+  NumberInput,
   Select,
   Stack,
-  Text,
-  Card,
-  Badge,
-  NumberInput,
-  Alert,
+  Stepper,
   Switch,
-  JsonInput,
-} from '@mantine/core';
-import {
-  IconRocket,
-  IconCheck,
-} from '@tabler/icons-react';
-import { ContractTemplate, contractTemplates } from '../data/contractTemplates';
-import { useDeployContract, useAutoAccounts } from '../hooks/useDevKit';
+  Text,
+  TextInput,
+} from "@mantine/core";
+import { IconCheck, IconRocket } from "@tabler/icons-react";
+import { useState } from "react";
+import { ContractTemplate, contractTemplates } from "../data/contractTemplates";
+import { useAutoAccounts, useDeployContract } from "../hooks/useDevKit";
 
 interface DeploymentWizardProps {
   opened: boolean;
   onClose: () => void;
   selectedTemplate?: ContractTemplate;
-  onDeploymentSuccess?: (contracts: Array<{
-    address: string;
-    name: string;
-    abi: any[];
-    chain: 'core' | 'evm';
-    deployedAt: string;
-  }>) => void;
+  onDeploymentSuccess?: (
+    contracts: Array<{
+      address: string;
+      name: string;
+      abi: any[];
+      chain: "core" | "evm";
+      deployedAt: string;
+    }>
+  ) => void;
 }
 
-export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeploymentSuccess }: DeploymentWizardProps) {
+export function DeploymentWizard({
+  opened,
+  onClose,
+  selectedTemplate,
+  onDeploymentSuccess,
+}: DeploymentWizardProps) {
   const [activeStep, setActiveStep] = useState(0);
-  const [template, setTemplate] = useState<ContractTemplate | null>(selectedTemplate || null);
-  const [chain, setChain] = useState<'core' | 'evm'>('core');
+  const [template, setTemplate] = useState<ContractTemplate | null>(
+    selectedTemplate || null
+  );
+  const [chain, setChain] = useState<"core" | "evm">("core");
   const [accountIndex, setAccountIndex] = useState(0);
-  const [constructorArgs, setConstructorArgs] = useState<Record<string, any>>({});
-  const [customAbi, setCustomAbi] = useState('');
-  const [customBytecode, setCustomBytecode] = useState('');
+  const [constructorArgs, setConstructorArgs] = useState<Record<string, any>>(
+    {}
+  );
+  const [customAbi, setCustomAbi] = useState("");
+  const [customBytecode, setCustomBytecode] = useState("");
   const [deployToBoth, setDeployToBoth] = useState(true);
 
   const deployContract = useDeployContract();
   const { data: accountsData } = useAutoAccounts();
-  const accounts = Array.isArray(accountsData) ? accountsData : (accountsData?.accounts || []);
+  const accounts = Array.isArray(accountsData)
+    ? accountsData
+    : accountsData?.accounts || [];
 
   const nextStep = () => setActiveStep((current) => Math.min(current + 1, 3));
   const prevStep = () => setActiveStep((current) => Math.max(current - 1, 0));
 
   const handleTemplateSelect = (templateId: string) => {
-    const selectedTemplate = contractTemplates.find(t => t.id === templateId);
+    const selectedTemplate = contractTemplates.find((t) => t.id === templateId);
     setTemplate(selectedTemplate || null);
     if (selectedTemplate?.constructorArgs) {
       const defaultArgs: Record<string, any> = {};
-      selectedTemplate.constructorArgs.forEach(arg => {
-        defaultArgs[arg.name] = arg.defaultValue || '';
+      selectedTemplate.constructorArgs.forEach((arg) => {
+        defaultArgs[arg.name] = arg.defaultValue || "";
       });
       setConstructorArgs(defaultArgs);
     }
@@ -66,15 +76,17 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
 
   const handleDeploy = async () => {
     try {
-      let abi, bytecode, args: any[] = [];
+      let abi,
+        bytecode,
+        args: any[] = [];
 
       if (template) {
         abi = template.abi;
         bytecode = template.bytecode;
         if (template.constructorArgs) {
-          args = template.constructorArgs.map(arg => {
+          args = template.constructorArgs.map((arg) => {
             const value = constructorArgs[arg.name];
-            if (arg.type === 'uint256') {
+            if (arg.type === "uint256") {
               return value.toString();
             }
             return value;
@@ -89,7 +101,7 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
         address: string;
         name: string;
         abi: any[];
-        chain: 'core' | 'evm';
+        chain: "core" | "evm";
         deployedAt: string;
       }> = [];
 
@@ -99,7 +111,7 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
           abi,
           bytecode,
           args,
-          chain: 'core',
+          chain: "core",
           accountIndex,
         });
 
@@ -107,20 +119,20 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
           abi,
           bytecode,
           args,
-          chain: 'evm',
+          chain: "evm",
           accountIndex,
         });
 
         // Debug: log raw API responses
         // eslint-disable-next-line no-console
-        console.debug('Deployment results:', { coreResult, evmResult });
+        console.debug("Deployment results:", { coreResult, evmResult });
 
         if (coreResult?.address) {
           deployedContracts.push({
             address: coreResult.address,
-            name: template?.name || 'Custom Contract',
+            name: template?.name || "Custom Contract",
             abi,
-            chain: 'core',
+            chain: "core",
             deployedAt: new Date().toISOString(),
           });
         }
@@ -128,9 +140,9 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
         if (evmResult?.address) {
           deployedContracts.push({
             address: evmResult.address,
-            name: template?.name || 'Custom Contract',
+            name: template?.name || "Custom Contract",
             abi,
-            chain: 'evm',
+            chain: "evm",
             deployedAt: new Date().toISOString(),
           });
         }
@@ -145,12 +157,12 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
 
         // Debug: log raw API response
         // eslint-disable-next-line no-console
-        console.debug('Deployment single-chain result:', { result });
+        console.debug("Deployment single-chain result:", { result });
 
         if (result?.address) {
           deployedContracts.push({
             address: result.address,
-            name: template?.name || 'Custom Contract',
+            name: template?.name || "Custom Contract",
             abi,
             chain,
             deployedAt: new Date().toISOString(),
@@ -160,7 +172,7 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
 
       // Debug final constructed array
       // eslint-disable-next-line no-console
-      console.debug('Final deployedContracts array:', deployedContracts);
+      console.debug("Final deployedContracts array:", deployedContracts);
 
       // Notify parent component of successful deployment
       if (deployedContracts.length > 0 && onDeploymentSuccess) {
@@ -169,7 +181,7 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
 
       setActiveStep(3); // Success step
     } catch (error) {
-      console.error('Deployment failed:', error);
+      console.error("Deployment failed:", error);
     }
   };
 
@@ -177,8 +189,8 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
     setActiveStep(0);
     setTemplate(selectedTemplate || null);
     setConstructorArgs({});
-    setCustomAbi('');
-    setCustomBytecode('');
+    setCustomAbi("");
+    setCustomBytecode("");
     onClose();
   };
 
@@ -198,12 +210,15 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
                 label="Contract Template"
                 placeholder="Choose a template or select custom"
                 data={[
-                  ...contractTemplates.map(t => ({ value: t.id, label: t.name })),
-                  { value: 'custom', label: 'Custom Contract' }
+                  ...contractTemplates.map((t) => ({
+                    value: t.id,
+                    label: t.name,
+                  })),
+                  { value: "custom", label: "Custom Contract" },
                 ]}
-                value={template?.id || ''}
+                value={template?.id || ""}
                 onChange={(value) => {
-                  if (value === 'custom') {
+                  if (value === "custom") {
                     setTemplate(null);
                   } else if (value) {
                     handleTemplateSelect(value);
@@ -218,7 +233,9 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
                   <Text fw={500}>{selectedTemplate.name}</Text>
                   <Badge>{selectedTemplate.category}</Badge>
                 </Group>
-                <Text size="sm" c="dimmed">{selectedTemplate.description}</Text>
+                <Text size="sm" c="dimmed">
+                  {selectedTemplate.description}
+                </Text>
               </Card>
             )}
 
@@ -228,7 +245,9 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
                   <Text fw={500}>{template.name}</Text>
                   <Badge>{template.category}</Badge>
                 </Group>
-                <Text size="sm" c="dimmed">{template.description}</Text>
+                <Text size="sm" c="dimmed">
+                  {template.description}
+                </Text>
               </Card>
             )}
 
@@ -261,10 +280,10 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
                 label="Deploy From Account"
                 data={accounts.map((acc: any, index: number) => ({
                   value: index.toString(),
-                  label: `Account ${index} (${acc.balance || '0'} CFX)`
+                  label: `Account ${index} (${acc.balance || "0"} CFX)`,
                 }))}
                 value={accountIndex.toString()}
-                onChange={(value) => setAccountIndex(parseInt(value || '0'))}
+                onChange={(value) => setAccountIndex(parseInt(value || "0"))}
               />
             </Group>
 
@@ -279,68 +298,84 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
               <Select
                 label="Target Chain"
                 data={[
-                  { value: 'core', label: 'Core Space' },
-                  { value: 'evm', label: 'eSpace (EVM)' }
+                  { value: "core", label: "Core Space" },
+                  { value: "evm", label: "eSpace (EVM)" },
                 ]}
                 value={chain}
-                onChange={(value) => setChain(value as 'core' | 'evm')}
+                onChange={(value) => setChain(value as "core" | "evm")}
               />
             )}
 
-            {template?.constructorArgs && template.constructorArgs.length > 0 && (
-              <Stack gap="sm">
-                <Text fw={500}>Constructor Arguments</Text>
-                {template.constructorArgs.map((arg) => (
-                  <div key={arg.name}>
-                    {arg.type === 'uint256' ? (
-                      <NumberInput
-                        label={arg.name}
-                        description={arg.description}
-                        value={constructorArgs[arg.name] || ''}
-                        onChange={(value) => setConstructorArgs(prev => ({
-                          ...prev,
-                          [arg.name]: value
-                        }))}
-                      />
-                    ) : (
-                      <TextInput
-                        label={arg.name}
-                        description={arg.description}
-                        value={constructorArgs[arg.name] || ''}
-                        onChange={(e) => setConstructorArgs(prev => ({
-                          ...prev,
-                          [arg.name]: e.target.value
-                        }))}
-                      />
-                    )}
-                  </div>
-                ))}
-              </Stack>
-            )}
+            {template?.constructorArgs &&
+              template.constructorArgs.length > 0 && (
+                <Stack gap="sm">
+                  <Text fw={500}>Constructor Arguments</Text>
+                  {template.constructorArgs.map((arg) => (
+                    <div key={arg.name}>
+                      {arg.type === "uint256" ? (
+                        <NumberInput
+                          label={arg.name}
+                          description={arg.description}
+                          value={constructorArgs[arg.name] || ""}
+                          onChange={(value) =>
+                            setConstructorArgs((prev) => ({
+                              ...prev,
+                              [arg.name]: value,
+                            }))
+                          }
+                        />
+                      ) : (
+                        <TextInput
+                          label={arg.name}
+                          description={arg.description}
+                          value={constructorArgs[arg.name] || ""}
+                          onChange={(e) =>
+                            setConstructorArgs((prev) => ({
+                              ...prev,
+                              [arg.name]: e.target.value,
+                            }))
+                          }
+                        />
+                      )}
+                    </div>
+                  ))}
+                </Stack>
+              )}
           </Stack>
         </Stepper.Step>
 
         <Stepper.Step label="Deploy" description="Deploy contract">
           <Stack gap="md">
             <Alert icon={<IconRocket size={16} />} color="blue">
-              Ready to deploy contract to {deployToBoth ? 'both Core and eSpace' : chain}.
+              Ready to deploy contract to{" "}
+              {deployToBoth ? "both Core and eSpace" : chain}.
             </Alert>
 
             {template && (
               <Card withBorder padding="md">
-                <Text fw={500} mb="sm">Contract Details</Text>
+                <Text fw={500} mb="sm">
+                  Contract Details
+                </Text>
                 <Group justify="space-between" mb="xs">
                   <Text size="sm">Template:</Text>
-                  <Text size="sm" fw={500}>{template.name}</Text>
+                  <Text size="sm" fw={500}>
+                    {template.name}
+                  </Text>
                 </Group>
                 <Group justify="space-between" mb="xs">
                   <Text size="sm">Account:</Text>
-                  <Text size="sm" ff="monospace">Account {accountIndex}</Text>
+                  <Text size="sm" ff="monospace">
+                    Account {accountIndex}
+                  </Text>
                 </Group>
                 <Group justify="space-between">
                   <Text size="sm">Target:</Text>
                   <Text size="sm" fw={500}>
-                    {deployToBoth ? 'Core + eSpace' : chain === 'core' ? 'Core Space' : 'eSpace'}
+                    {deployToBoth
+                      ? "Core + eSpace"
+                      : chain === "core"
+                      ? "Core Space"
+                      : "eSpace"}
                   </Text>
                 </Group>
               </Card>
@@ -360,9 +395,12 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
         <Stepper.Completed>
           <Stack gap="md" align="center">
             <IconCheck size={48} color="green" />
-            <Text fw={500} size="lg">Contract Deployed Successfully!</Text>
+            <Text fw={500} size="lg">
+              Contract Deployed Successfully!
+            </Text>
             <Text size="sm" ta="center" c="dimmed">
-              Your contract has been deployed and is now available for interaction.
+              Your contract has been deployed and is now available for
+              interaction.
             </Text>
             <Button onClick={handleClose}>Close</Button>
           </Stack>
@@ -371,17 +409,20 @@ export function DeploymentWizard({ opened, onClose, selectedTemplate, onDeployme
 
       {activeStep < 3 && (
         <Group justify="space-between" mt="xl">
-          <Button variant="default" onClick={prevStep} disabled={activeStep === 0}>
+          <Button
+            variant="default"
+            onClick={prevStep}
+            disabled={activeStep === 0}
+          >
             Back
           </Button>
           <Button
             onClick={nextStep}
             disabled={
-              (activeStep === 0 && !template && !customAbi) ||
-              (activeStep === 2)
+              (activeStep === 0 && !template && !customAbi) || activeStep === 2
             }
           >
-            {activeStep === 2 ? 'Deploy' : 'Next'}
+            {activeStep === 2 ? "Deploy" : "Next"}
           </Button>
         </Group>
       )}

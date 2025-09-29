@@ -1,36 +1,40 @@
-import { useState } from 'react';
 import {
-  Card,
-  Group,
-  Text,
-  Button,
-  Stack,
-  Badge,
-  Tabs,
-  TextInput,
-  Select,
+  ActionIcon,
   Alert,
+  Badge,
+  Button,
+  Card,
   Code,
   CopyButton,
-  ActionIcon,
-  Tooltip,
-  NumberInput,
+  Group,
   JsonInput,
-} from '@mantine/core';
+  NumberInput,
+  Select,
+  Stack,
+  Tabs,
+  Text,
+  TextInput,
+  Tooltip,
+} from "@mantine/core";
 import {
-  IconCopy,
   IconCheck,
   IconCode,
-  IconEye,
+  IconCopy,
   IconEdit,
-} from '@tabler/icons-react';
-import { useReadContract, useWriteContract, useAutoAccounts } from '../hooks/useDevKit';
+  IconEye,
+} from "@tabler/icons-react";
+import { useState } from "react";
+import {
+  useAutoAccounts,
+  useReadContract,
+  useWriteContract,
+} from "../hooks/useDevKit";
 
 interface ContractInfo {
   address: string;
   name: string;
   abi: any[];
-  chain: 'core' | 'evm';
+  chain: "core" | "evm";
   deployedAt: string;
 }
 
@@ -39,8 +43,11 @@ interface ContractInteractionProps {
   onRemove?: () => void;
 }
 
-export function ContractInteraction({ contract, onRemove }: ContractInteractionProps) {
-  const [selectedFunction, setSelectedFunction] = useState<string>('');
+export function ContractInteraction({
+  contract,
+  onRemove,
+}: ContractInteractionProps) {
+  const [selectedFunction, setSelectedFunction] = useState<string>("");
   const [functionArgs, setFunctionArgs] = useState<Record<string, any>>({});
   const [accountIndex, setAccountIndex] = useState(0);
   const [readResult, setReadResult] = useState<any>(null);
@@ -49,38 +56,48 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
   const readContract = useReadContract();
   const writeContract = useWriteContract();
   const { data: accountsData } = useAutoAccounts();
-  const accounts = Array.isArray(accountsData) ? accountsData : (accountsData?.accounts || []);
+  const accounts = Array.isArray(accountsData)
+    ? accountsData
+    : accountsData?.accounts || [];
 
   const readFunctions = contract.abi.filter(
-    (func) => func.type === 'function' && (func.stateMutability === 'view' || func.stateMutability === 'pure')
+    (func) =>
+      func.type === "function" &&
+      (func.stateMutability === "view" || func.stateMutability === "pure")
   );
 
   const writeFunctions = contract.abi.filter(
-    (func) => func.type === 'function' && func.stateMutability !== 'view' && func.stateMutability !== 'pure'
+    (func) =>
+      func.type === "function" &&
+      func.stateMutability !== "view" &&
+      func.stateMutability !== "pure"
   );
 
-  const selectedFunc = contract.abi.find(func => func.name === selectedFunction);
+  const selectedFunc = contract.abi.find(
+    (func) => func.name === selectedFunction
+  );
 
   const handleFunctionCall = async (isWrite: boolean) => {
     setCallError(null);
     if (!selectedFunc) {
-      setCallError('No function selected');
+      setCallError("No function selected");
       return;
     }
 
     if (!contract.address || !contract.abi || !selectedFunction) {
-      setCallError('Address, ABI, and function name are required');
+      setCallError("Address, ABI, and function name are required");
       return;
     }
 
     try {
-      const args = selectedFunc.inputs?.map((input: any) => {
-        const value = functionArgs[input.name];
-        if (input.type.includes('uint') && value) {
-          return value.toString();
-        }
-        return value || '';
-      }) || [];
+      const args =
+        selectedFunc.inputs?.map((input: any) => {
+          const value = functionArgs[input.name];
+          if (input.type.includes("uint") && value) {
+            return value.toString();
+          }
+          return value || "";
+        }) || [];
 
       if (isWrite) {
         await writeContract.mutateAsync({
@@ -102,13 +119,13 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
         setReadResult(result);
       }
     } catch (error: any) {
-      console.error('Contract call failed:', error);
+      console.error("Contract call failed:", error);
       setCallError(error?.message || String(error));
     }
   };
 
   const resetForm = () => {
-    setSelectedFunction('');
+    setSelectedFunction("");
     setFunctionArgs({});
     setReadResult(null);
   };
@@ -120,8 +137,8 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
           <div>
             <Group gap="sm" mb="xs">
               <Text fw={500}>{contract.name}</Text>
-              <Badge color={contract.chain === 'core' ? 'blue' : 'green'}>
-                {contract.chain === 'core' ? 'Core Space' : 'eSpace'}
+              <Badge color={contract.chain === "core" ? "blue" : "green"}>
+                {contract.chain === "core" ? "Core Space" : "eSpace"}
               </Badge>
             </Group>
             <Group gap="xs">
@@ -130,14 +147,18 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
               </Text>
               <CopyButton value={contract.address}>
                 {({ copied, copy }) => (
-                  <Tooltip label={copied ? 'Copied' : 'Copy address'}>
+                  <Tooltip label={copied ? "Copied" : "Copy address"}>
                     <ActionIcon
-                      color={copied ? 'teal' : 'gray'}
+                      color={copied ? "teal" : "gray"}
                       variant="subtle"
                       onClick={copy}
                       size="sm"
                     >
-                      {copied ? <IconCheck size={12} /> : <IconCopy size={12} />}
+                      {copied ? (
+                        <IconCheck size={12} />
+                      ) : (
+                        <IconCopy size={12} />
+                      )}
                     </ActionIcon>
                   </Tooltip>
                 )}
@@ -172,46 +193,58 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
               <Select
                 label="Function"
                 placeholder="Select a read function"
-                data={readFunctions.map(func => ({
+                data={readFunctions.map((func) => ({
                   value: func.name,
-                  label: `${func.name}(${func.inputs?.map((i: any) => `${i.type} ${i.name}`).join(', ') || ''})`
+                  label: `${func.name}(${
+                    func.inputs
+                      ?.map((i: any) => `${i.type} ${i.name}`)
+                      .join(", ") || ""
+                  })`,
                 }))}
                 value={selectedFunction}
                 onChange={(value) => {
-                  setSelectedFunction(value || '');
+                  setSelectedFunction(value || "");
                   setFunctionArgs({});
                   setReadResult(null);
                 }}
               />
 
-              {selectedFunc && selectedFunc.inputs && selectedFunc.inputs.length > 0 && (
-                <Stack gap="xs">
-                  <Text size="sm" fw={500}>Parameters</Text>
-                  {selectedFunc.inputs.map((input: any) => (
-                    <div key={input.name}>
-                      {input.type.includes('uint') ? (
-                        <NumberInput
-                          label={`${input.name} (${input.type})`}
-                          value={functionArgs[input.name] || ''}
-                          onChange={(value) => setFunctionArgs(prev => ({
-                            ...prev,
-                            [input.name]: value
-                          }))}
-                        />
-                      ) : (
-                        <TextInput
-                          label={`${input.name} (${input.type})`}
-                          value={functionArgs[input.name] || ''}
-                          onChange={(e) => setFunctionArgs(prev => ({
-                            ...prev,
-                            [input.name]: e.target.value
-                          }))}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </Stack>
-              )}
+              {selectedFunc &&
+                selectedFunc.inputs &&
+                selectedFunc.inputs.length > 0 && (
+                  <Stack gap="xs">
+                    <Text size="sm" fw={500}>
+                      Parameters
+                    </Text>
+                    {selectedFunc.inputs.map((input: any) => (
+                      <div key={input.name}>
+                        {input.type.includes("uint") ? (
+                          <NumberInput
+                            label={`${input.name} (${input.type})`}
+                            value={functionArgs[input.name] || ""}
+                            onChange={(value) =>
+                              setFunctionArgs((prev) => ({
+                                ...prev,
+                                [input.name]: value,
+                              }))
+                            }
+                          />
+                        ) : (
+                          <TextInput
+                            label={`${input.name} (${input.type})`}
+                            value={functionArgs[input.name] || ""}
+                            onChange={(e) =>
+                              setFunctionArgs((prev) => ({
+                                ...prev,
+                                [input.name]: e.target.value,
+                              }))
+                            }
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </Stack>
+                )}
 
               <Group>
                 <Button
@@ -236,10 +269,9 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
               {readResult !== null && (
                 <Alert color="green" title="Result">
                   <Code block>
-                    {typeof readResult === 'object'
+                    {typeof readResult === "object"
                       ? JSON.stringify(readResult, null, 2)
-                      : readResult?.toString()
-                    }
+                      : readResult?.toString()}
                   </Code>
                 </Alert>
               )}
@@ -252,54 +284,66 @@ export function ContractInteraction({ contract, onRemove }: ContractInteractionP
                 label="Account"
                 data={accounts.map((acc: any, index: number) => ({
                   value: index.toString(),
-                  label: `Account ${index} (${acc.balance || '0'} CFX)`
+                  label: `Account ${index} (${acc.balance || "0"} CFX)`,
                 }))}
                 value={accountIndex.toString()}
-                onChange={(value) => setAccountIndex(parseInt(value || '0'))}
+                onChange={(value) => setAccountIndex(parseInt(value || "0"))}
               />
 
               <Select
                 label="Function"
                 placeholder="Select a write function"
-                data={writeFunctions.map(func => ({
+                data={writeFunctions.map((func) => ({
                   value: func.name,
-                  label: `${func.name}(${func.inputs?.map((i: any) => `${i.type} ${i.name}`).join(', ') || ''})`
+                  label: `${func.name}(${
+                    func.inputs
+                      ?.map((i: any) => `${i.type} ${i.name}`)
+                      .join(", ") || ""
+                  })`,
                 }))}
                 value={selectedFunction}
                 onChange={(value) => {
-                  setSelectedFunction(value || '');
+                  setSelectedFunction(value || "");
                   setFunctionArgs({});
                 }}
               />
 
-              {selectedFunc && selectedFunc.inputs && selectedFunc.inputs.length > 0 && (
-                <Stack gap="xs">
-                  <Text size="sm" fw={500}>Parameters</Text>
-                  {selectedFunc.inputs.map((input: any) => (
-                    <div key={input.name}>
-                      {input.type.includes('uint') ? (
-                        <NumberInput
-                          label={`${input.name} (${input.type})`}
-                          value={functionArgs[input.name] || ''}
-                          onChange={(value) => setFunctionArgs(prev => ({
-                            ...prev,
-                            [input.name]: value
-                          }))}
-                        />
-                      ) : (
-                        <TextInput
-                          label={`${input.name} (${input.type})`}
-                          value={functionArgs[input.name] || ''}
-                          onChange={(e) => setFunctionArgs(prev => ({
-                            ...prev,
-                            [input.name]: e.target.value
-                          }))}
-                        />
-                      )}
-                    </div>
-                  ))}
-                </Stack>
-              )}
+              {selectedFunc &&
+                selectedFunc.inputs &&
+                selectedFunc.inputs.length > 0 && (
+                  <Stack gap="xs">
+                    <Text size="sm" fw={500}>
+                      Parameters
+                    </Text>
+                    {selectedFunc.inputs.map((input: any) => (
+                      <div key={input.name}>
+                        {input.type.includes("uint") ? (
+                          <NumberInput
+                            label={`${input.name} (${input.type})`}
+                            value={functionArgs[input.name] || ""}
+                            onChange={(value) =>
+                              setFunctionArgs((prev) => ({
+                                ...prev,
+                                [input.name]: value,
+                              }))
+                            }
+                          />
+                        ) : (
+                          <TextInput
+                            label={`${input.name} (${input.type})`}
+                            value={functionArgs[input.name] || ""}
+                            onChange={(e) =>
+                              setFunctionArgs((prev) => ({
+                                ...prev,
+                                [input.name]: e.target.value,
+                              }))
+                            }
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </Stack>
+                )}
 
               <Group>
                 <Button

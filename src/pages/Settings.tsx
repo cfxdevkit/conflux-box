@@ -1,19 +1,16 @@
 import {
-  Stack,
-  Title,
-  Card,
-  Text,
-  Group,
-  Switch,
   Button,
+  Card,
+  Group,
   NumberInput,
-  TextInput,
   Select,
-} from '@mantine/core';
-import {
-  IconDeviceFloppy,
-  IconRefresh,
-} from '@tabler/icons-react';
+  Stack,
+  Switch,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
+import { IconDeviceFloppy, IconRefresh } from "@tabler/icons-react";
 
 export default function Settings() {
   return (
@@ -21,10 +18,7 @@ export default function Settings() {
       <Group justify="space-between">
         <Title order={2}>Settings</Title>
         <Group>
-          <Button
-            leftSection={<IconRefresh size={16} />}
-            variant="light"
-          >
+          <Button leftSection={<IconRefresh size={16} />} variant="light">
             Reset
           </Button>
           <Button leftSection={<IconDeviceFloppy size={16} />}>
@@ -34,7 +28,9 @@ export default function Settings() {
       </Group>
 
       <Card withBorder padding="lg" radius="md">
-        <Text fw={500} mb="md">Development Node</Text>
+        <Text fw={500} mb="md">
+          Development Node
+        </Text>
         <Stack gap="md">
           <Group grow>
             <NumberInput
@@ -48,9 +44,9 @@ export default function Settings() {
               label="Network Mode"
               placeholder="Select mode"
               data={[
-                { value: 'local', label: 'Local Development' },
-                { value: 'testnet', label: 'Testnet' },
-                { value: 'mainnet', label: 'Mainnet' },
+                { value: "local", label: "Local Development" },
+                { value: "testnet", label: "Testnet" },
+                { value: "mainnet", label: "Mainnet" },
               ]}
               defaultValue="local"
             />
@@ -71,7 +67,9 @@ export default function Settings() {
       </Card>
 
       <Card withBorder padding="lg" radius="md">
-        <Text fw={500} mb="md">Backend Configuration</Text>
+        <Text fw={500} mb="md">
+          Backend Configuration
+        </Text>
         <Stack gap="md">
           <Group grow>
             <TextInput
@@ -94,15 +92,17 @@ export default function Settings() {
       </Card>
 
       <Card withBorder padding="lg" radius="md">
-        <Text fw={500} mb="md">UI Preferences</Text>
+        <Text fw={500} mb="md">
+          UI Preferences
+        </Text>
         <Stack gap="md">
           <Select
             label="Theme"
             placeholder="Select theme"
             data={[
-              { value: 'auto', label: 'Auto (System)' },
-              { value: 'light', label: 'Light' },
-              { value: 'dark', label: 'Dark' },
+              { value: "auto", label: "Auto (System)" },
+              { value: "light", label: "Light" },
+              { value: "dark", label: "Dark" },
             ]}
             defaultValue="auto"
           />

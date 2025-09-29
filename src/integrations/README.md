@@ -9,11 +9,13 @@ The modular integration system allows easy addition of DeFi protocol integration
 ### Core Components
 
 1. **Integration Framework** (`src/integrations/types.ts`)
+
    - Defines interfaces and types for integrations
    - Provides the IntegrationRegistry class for managing integrations
    - Network-aware filtering system
 
 2. **Integration Registry** (`src/integrations/registry.ts`)
+
    - Auto-registers all available integrations
    - Provides filtering by network and category
    - Manages integration metadata
@@ -26,9 +28,10 @@ The modular integration system allows easy addition of DeFi protocol integration
 ## Current Integrations
 
 ### GinsenSwap (`src/integrations/ginsenswap/GinsenSwapIntegration.tsx`)
+
 - **Type**: DEX (Decentralized Exchange)
 - **Networks**: Testnet, Mainnet
-- **Features**: 
+- **Features**:
   - Token swapping (USDT/USDC)
   - Real-time quotes from backend API
   - Slippage and fee controls
@@ -36,6 +39,7 @@ The modular integration system allows easy addition of DeFi protocol integration
   - Based on Uniswap V3 architecture
 
 ### Meson Bridge (`src/integrations/meson/MesonIntegration.tsx`)
+
 - **Type**: Bridge (Cross-chain)
 - **Networks**: Mainnet only
 - **Features**:
@@ -54,10 +58,10 @@ Create a new component following this structure:
 
 ```typescript
 // src/integrations/your-protocol/YourProtocolIntegration.tsx
-import React from 'react';
-import { Card, Stack, Text, Button } from '@mantine/core';
-import { useAccount } from 'wagmi';
-import type { IntegrationComponentProps } from '../types';
+import React from "react";
+import { Card, Stack, Text, Button } from "@mantine/core";
+import { useAccount } from "wagmi";
+import type { IntegrationComponentProps } from "../types";
 
 export const YourProtocolIntegration: React.FC<IntegrationComponentProps> = ({
   currentNetwork,
@@ -67,7 +71,7 @@ export const YourProtocolIntegration: React.FC<IntegrationComponentProps> = ({
   const { isConnected } = useAccount();
 
   // Network filtering
-  if (!isVisible || currentNetwork === 'local') {
+  if (!isVisible || currentNetwork === "local") {
     return (
       <Alert color="yellow">
         Your Protocol is not available on this network.
@@ -92,23 +96,25 @@ export const YourProtocolIntegration: React.FC<IntegrationComponentProps> = ({
 Add to `src/integrations/registry.ts`:
 
 ```typescript
-import { YourProtocolIntegration } from './your-protocol/YourProtocolIntegration';
+import { YourProtocolIntegration } from "./your-protocol/YourProtocolIntegration";
 
 // In registerIntegrations function:
 const yourProtocolMetadata: IntegrationMetadata = {
-  id: 'your-protocol',
-  name: 'Your Protocol',
-  description: 'Description of your protocol',
-  category: 'dex', // or 'bridge', 'lending', 'yield', 'tools'
-  networks: ['testnet', 'mainnet'], // supported networks
+  id: "your-protocol",
+  name: "Your Protocol",
+  description: "Description of your protocol",
+  category: "dex", // or 'bridge', 'lending', 'yield', 'tools'
+  networks: ["testnet", "mainnet"], // supported networks
   icon: React.createElement(IconYourProtocol, { size: 24 }),
-  tvl: '$X.XM', // optional
-  website: 'https://yourprotocol.com', // optional
+  tvl: "$X.XM", // optional
+  website: "https://yourprotocol.com", // optional
   isActive: true,
   requiresWallet: true, // optional
 };
 
-registry.register(createIntegration(yourProtocolMetadata, YourProtocolIntegration));
+registry.register(
+  createIntegration(yourProtocolMetadata, YourProtocolIntegration)
+);
 ```
 
 ### Step 3: Export Component (Optional)
@@ -116,27 +122,31 @@ registry.register(createIntegration(yourProtocolMetadata, YourProtocolIntegratio
 Add to `src/integrations/index.ts` if you want direct access:
 
 ```typescript
-export { YourProtocolIntegration } from './your-protocol/YourProtocolIntegration';
+export { YourProtocolIntegration } from "./your-protocol/YourProtocolIntegration";
 ```
 
 ## Integration Features
 
 ### Network Awareness
+
 - Integrations automatically filter based on supported networks
 - `currentNetwork` prop provides the active network
 - Components can show different behavior per network
 
 ### Wallet Integration
+
 - All integrations receive `useAccount()` from wagmi
 - Can check connection status and wallet addresses
 - Automatic wallet requirement detection
 
 ### Backend API Integration
+
 - GinsenSwap example shows how to integrate with `/api/swap/*` endpoints
 - Uses `useAuthStore()` for session management
 - Proper error handling and loading states
 
 ### UI Consistency
+
 - Uses Mantine UI components for consistent design
 - Follows existing patterns from Dashboard and other pages
 - Responsive design with mobile support
@@ -146,7 +156,7 @@ export { YourProtocolIntegration } from './your-protocol/YourProtocolIntegration
 - **dex**: Decentralized exchanges and AMMs
 - **bridge**: Cross-chain bridges and asset transfers
 - **lending**: Lending and borrowing protocols
-- **yield**: Yield farming and staking protocols  
+- **yield**: Yield farming and staking protocols
 - **tools**: Developer tools and utilities
 
 ## Network Types
@@ -179,25 +189,27 @@ For integrations requiring backend support, follow the GinsenSwap pattern:
 The Meson Bridge integration demonstrates how to integrate real third-party SDKs:
 
 ### Meson SDK Integration
+
 ```typescript
-import { MesonToButton } from '@mesonfi/to/react';
+import { MesonToButton } from "@mesonfi/to/react";
 
 // Basic integration
 <MesonToButton
   options={{
-    to: 'cfx', // Target Conflux eSpace
-    recipient: evmAddress // DevKit account EVM address
+    to: "cfx", // Target Conflux eSpace
+    recipient: evmAddress, // DevKit account EVM address
   }}
   onCompleted={handleCompleted} // Handle completion
 >
   <CustomButtonContent />
-</MesonToButton>
+</MesonToButton>;
 ```
 
 ### SDK Integration Best Practices
+
 1. **Install SDK dependencies**: `npm install @mesonfi/to`
 2. **Handle completion callbacks**: Process real transaction data
-3. **Integrate with DevKit accounts**: Use EVM addresses as recipients  
+3. **Integrate with DevKit accounts**: Use EVM addresses as recipients
 4. **Provide user feedback**: Show loading states and completion status
 5. **Error handling**: Catch and display SDK errors gracefully
 6. **Network validation**: Ensure SDK is only used on supported networks

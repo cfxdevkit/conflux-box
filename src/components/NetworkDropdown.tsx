@@ -1,39 +1,48 @@
-import { Menu, Button, Group, Text, Badge, Loader, Alert } from '@mantine/core';
-import { IconNetwork, IconChevronDown, IconLock, IconCheck } from '@tabler/icons-react';
-import { useCurrentNetwork, useSwitchNetwork, useAutoDevKitStatus } from '../hooks/useDevKit';
-import { notifications } from '@mantine/notifications';
+import { Alert, Badge, Button, Group, Loader, Menu, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import {
+  IconCheck,
+  IconChevronDown,
+  IconLock,
+  IconNetwork,
+} from "@tabler/icons-react";
+import {
+  useAutoDevKitStatus,
+  useCurrentNetwork,
+  useSwitchNetwork,
+} from "../hooks/useDevKit";
 
-export type NetworkType = 'local' | 'testnet' | 'mainnet';
+export type NetworkType = "local" | "testnet" | "mainnet";
 
 export function NetworkDropdown() {
   const { data: currentNetworkData } = useCurrentNetwork();
   const { data: devkitStatus } = useAutoDevKitStatus();
   const switchNetworkMutation = useSwitchNetwork();
 
-  const currentNetwork = currentNetworkData?.network || 'local';
+  const currentNetwork = currentNetworkData?.network || "local";
   const nodeRunning = devkitStatus?.running || false;
 
   const networks = [
     {
-      id: 'local' as NetworkType,
-      name: 'Local',
-      description: 'DevKit node',
+      id: "local" as NetworkType,
+      name: "Local",
+      description: "DevKit node",
       available: true,
-      color: 'green',
+      color: "green",
     },
     {
-      id: 'testnet' as NetworkType,
-      name: 'Testnet',
-      description: 'Conflux test network',
+      id: "testnet" as NetworkType,
+      name: "Testnet",
+      description: "Conflux test network",
       available: !nodeRunning,
-      color: 'yellow',
+      color: "yellow",
     },
     {
-      id: 'mainnet' as NetworkType,
-      name: 'Mainnet',
-      description: 'Conflux mainnet',
+      id: "mainnet" as NetworkType,
+      name: "Mainnet",
+      description: "Conflux mainnet",
       available: !nodeRunning,
-      color: 'blue',
+      color: "blue",
     },
   ];
 
@@ -45,9 +54,10 @@ export function NetworkDropdown() {
     if (!networkConfig?.available) {
       if (nodeRunning) {
         notifications.show({
-          title: 'Cannot Switch Network',
-          message: 'Cannot switch networks while local node is running. Stop the node first.',
-          color: 'yellow',
+          title: "Cannot Switch Network",
+          message:
+            "Cannot switch networks while local node is running. Stop the node first.",
+          color: "yellow",
         });
       }
       return;
@@ -60,15 +70,16 @@ export function NetworkDropdown() {
     try {
       await switchNetworkMutation.mutateAsync(network);
       notifications.show({
-        title: 'Network Switched',
+        title: "Network Switched",
         message: `Successfully switched to ${network} network`,
-        color: 'green',
+        color: "green",
       });
     } catch (error) {
       notifications.show({
-        title: 'Network Switch Failed',
-        message: error instanceof Error ? error.message : 'Failed to switch network',
-        color: 'red',
+        title: "Network Switch Failed",
+        message:
+          error instanceof Error ? error.message : "Failed to switch network",
+        color: "red",
       });
     }
   };
@@ -104,7 +115,9 @@ export function NetworkDropdown() {
         {/* Header */}
         <Menu.Label>
           <Group justify="space-between">
-            <Text size="sm" fw={500}>Current Network</Text>
+            <Text size="sm" fw={500}>
+              Current Network
+            </Text>
             <Group gap={6}>
               <Badge
                 size="xs"
@@ -118,15 +131,8 @@ export function NetworkDropdown() {
 
         {/* Lock notice */}
         {nodeRunning && (
-          <Alert
-            icon={<IconLock size={14} />}
-            color="blue"
-            mb="xs"
-            radius="sm"
-          >
-            <Text size="xs">
-              Locked to local while node running
-            </Text>
+          <Alert icon={<IconLock size={14} />} color="blue" mb="xs" radius="sm">
+            <Text size="xs">Locked to local while node running</Text>
           </Alert>
         )}
 
@@ -137,11 +143,7 @@ export function NetworkDropdown() {
           <Menu.Item
             key={network.id}
             leftSection={
-              <Badge
-                size="xs"
-                color={network.color}
-                variant="dot"
-              />
+              <Badge size="xs" color={network.color} variant="dot" />
             }
             rightSection={
               currentNetwork === network.id ? (
@@ -152,7 +154,11 @@ export function NetworkDropdown() {
             }
             disabled={!network.available || switchNetworkMutation.isPending}
             onClick={() => handleNetworkChange(network.id)}
-            bg={currentNetwork === network.id ? 'var(--mantine-color-blue-0)' : undefined}
+            bg={
+              currentNetwork === network.id
+                ? "var(--mantine-color-blue-0)"
+                : undefined
+            }
           >
             <div>
               <Text size="sm" fw={currentNetwork === network.id ? 500 : 400}>
