@@ -21,7 +21,7 @@ import Accounts from "./pages/Accounts";
 import Contracts from "./pages/Contracts";
 import Dashboard from "./pages/Dashboard";
 import Network from "./pages/Network";
-import Protocols from "./pages/Protocols";
+import Protocols from "./pages/Protocols.tsx";
 import Settings from "./pages/Settings";
 import { useWebSocket } from "./services/websocket";
 

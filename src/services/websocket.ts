@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useMemo } from 'react';
 import { create } from 'zustand';
 import { useQueryClient } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
@@ -310,7 +310,7 @@ export function useWebSocket() {
   const queryClient = useQueryClient();
 
   // Auto-connect on mount with React Query client
-  React.useEffect(() => {
+  useEffect(() => {
     if (!store.connected && !store.connecting) {
       store.connect(queryClient);
     }
@@ -327,7 +327,7 @@ export function useWebSocket() {
 export function useWebSocketMessages(messageType?: string, limit = 10) {
   const messages = useWebSocketStore(state => state.messages);
 
-  return React.useMemo(() => {
+  return useMemo(() => {
     let filtered = messages;
     
     if (messageType) {

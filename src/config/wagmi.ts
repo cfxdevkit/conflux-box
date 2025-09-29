@@ -30,8 +30,8 @@ export const config = createConfig({
     [confluxLocalESpace.id]: http('http://localhost:8545'),
     // Conflux eSpace testnet
     [confluxESpaceTestnet.id]: http('https://evmtestnet.confluxrpc.com'),
-    // Conflux eSpace mainnet
-    [confluxESpace.id]: http('https://evm.confluxrpc.com'),
+    // Conflux eSpace mainnet - use proxied endpoint to avoid CORS
+    [confluxESpace.id]: http('/rpc/conflux'),
   },
 });
 
