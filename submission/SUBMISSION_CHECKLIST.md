@@ -3,7 +3,10 @@
 **Project**: Conflux Box  
 **Hackathon**: Code Without Borders - SummerHackfest 2025  
 **Deadline**: September 15, 2025, 11:59 PM UTC  
-**Status**: 🟡 In Progress
+**St4. **Technical Highlights** (60 seconds)
+   - Built with React, TypeScript, Mantine UI
+   - Uses preview versions of upcoming @conflux-devkit packages
+   - Real-time WebSocket updates**: 🟡 In Progress
 
 ## 📋 Pre-Submission Checklist
 
@@ -12,7 +15,7 @@
 - [x] **Project is functional** - Core features work as demonstrated
 - [x] **Built during hackathon** - Code written within the 4-week period
 - [x] **Uses Conflux features** - Integrates with Conflux DevKit packages
-- [ ] **Team size compliant** - Up to 5 members per team (UPDATE: Add team members)
+- [x] **Team size compliant** - ✅ Solo developer team (compliant with up to 5 members rule)
 - [x] **Original work** - No plagiarism or unauthorized code reuse
 
 ### ✅ Repository Setup
@@ -143,15 +146,13 @@
 ### Key Features to Highlight
 
 1. **Modern Developer Experience** - Clean UI, TypeScript, real-time updates
-2. **Dual-Chain Support** - Core Space and eSpace integration
-3. **Published Package Integration** - Uses official Conflux DevKit packages
+2. **Dual-Chain Support** - Core Space and eSpace integration  
+3. **DevKit Preview Integration** - Uses preview versions of upcoming DevKit packages
 4. **DeFi Protocol Integration** - GinsenSwap DEX and Meson Bridge built-in
 5. **Account Management** - Development account creation and management
 6. **Smart Contract Tools** - Deploy and interact with contracts
 7. **Protocol Discovery** - Integrated ecosystem protocol browser
-8. **Network Monitoring** - Real-time blockchain status
-
-### Technical Achievements
+8. **Network Monitoring** - Real-time blockchain status### Technical Achievements
 
 - ✅ Full TypeScript implementation
 - ✅ Real-time WebSocket integration

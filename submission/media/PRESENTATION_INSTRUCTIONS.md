@@ -36,7 +36,7 @@
 ### Slide 3: Solution Overview
 **Content**:
 - "Conflux Box: A modern, beautiful frontend for blockchain development"
-- "Built with Mantine UI and official DevKit packages"
+- "Built with Mantine UI and preview DevKit packages"
 - "Seamless dual-chain support for Core and eSpace"
 
 **Visual Elements**:
@@ -51,7 +51,7 @@
 - ✅ Account creation and management
 - ✅ Smart contract deployment and interaction
 - ✅ Dynamic network switching
-- ✅ Official DevKit integration
+- ✅ DevKit preview integration
 
 **Visual Elements**:
 - Feature grid with icons
@@ -73,7 +73,7 @@
 
 ### Slide 6: Conflux Integration
 **Content**:
-- "Built with official Conflux DevKit packages"
+- "Built with preview versions of upcoming Conflux DevKit packages"
 - Core Space and eSpace network support
 - Dynamic chain ID handling (recent bug fix!)
 - Real-time network status monitoring
@@ -101,7 +101,7 @@
 - 🚀 Real-time WebSocket integration
 - 🧪 Comprehensive test suite (14 tests passing)
 - 🎨 Modern UI/UX with Mantine components
-- 📦 Published package consumption model
+- 📦 Preview package integration model
 
 **Visual Elements**:
 - Achievement badges or icons
@@ -112,7 +112,7 @@
 **Content**:
 - "Reference implementation for modern Conflux development"
 - "Lowers barrier to entry for new developers"
-- "Demonstrates best practices with published packages"
+- "Demonstrates best practices with preview DevKit packages"
 - "Community-ready open source project"
 
 **Visual Elements**:

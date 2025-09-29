@@ -2,7 +2,7 @@
 
 ## Overview
 
-Conflux Box is a modern, beautiful frontend for Conflux blockchain development, built with Mantine UI and powered by the official Conflux DevKit packages. It provides developers with an intuitive interface to interact with both Conflux Core Space and eSpace networks, featuring real-time monitoring, account management, and smart contract deployment capabilities.
+Conflux Box is a modern, beautiful frontend for Conflux blockchain development, built with Mantine UI and powered by preview versions of the upcoming Conflux DevKit packages. It provides developers with an intuitive interface to interact with both Conflux Core Space and eSpace networks, featuring real-time monitoring, account management, and smart contract deployment capabilities.
 
 ## Hackathon
 
@@ -10,12 +10,11 @@ Conflux Box is a modern, beautiful frontend for Conflux blockchain development, 
 
 ## Team
 
-- Team Lead: [Add Team Member] (GitHub: @username, Discord: username#1234)
-- [Add Additional Team Members as Needed]
+- **Solo Developer**: @cfxdevkit (GitHub: @cfxdevkit, Discord: spcfxda)
 
 ## Problem Statement
 
-Conflux blockchain development lacked a modern, user-friendly interface that developers could use to easily interact with the network. Existing tools were often command-line based or required complex setup processes, creating barriers for developers wanting to build on Conflux. There was no reference implementation showing how to properly use the published Conflux DevKit packages in a real-world application.
+Conflux blockchain development lacked a modern, user-friendly interface that developers could use to easily interact with the network. Existing tools were often command-line based or required complex setup processes, creating barriers for developers wanting to build on Conflux. There was no reference implementation showing how to properly use the upcoming Conflux DevKit packages in a real-world application.
 
 ## Solution
 
@@ -24,7 +23,7 @@ Conflux Box addresses these challenges by providing:
 - **Modern Developer Experience**: A clean, intuitive interface built with Mantine UI components
 - **Dual-Chain Support**: Seamless interaction with both Conflux Core Space and eSpace networks
 - **Real-time Integration**: Live blockchain monitoring and updates via WebSocket connections
-- **Official Package Integration**: Reference implementation using published `@conflux-devkit` packages
+- **DevKit Preview Integration**: Reference implementation using preview versions of `@conflux-devkit` packages
 - **Complete Development Toolkit**: Account management, contract deployment, and network monitoring in one place
 
 ## Conflux Integration
@@ -41,8 +40,11 @@ Conflux Box showcases extensive integration with Conflux features:
 
 ### DevKit Package Usage
 
-- `@conflux-devkit/node@^0.1.0` - Core blockchain functionality and network interaction
-- `@conflux-devkit/backend@^0.1.0` - Backend API services and WebSocket integration
+### DevKit Package Usage (Preview Versions)
+- `@conflux-devkit/node@^0.1.0` - Core blockchain functionality and network interaction (preview)
+- `@conflux-devkit/backend@^0.1.0` - Backend API services and WebSocket integration (preview)
+
+**Note**: This project showcases preview versions of the upcoming Conflux DevKit packages, demonstrating their capabilities before official release.
 
 ## Features
 

@@ -12,9 +12,9 @@
 ### 1. Introduction (30 seconds)
 
 ```
-"Hi, I'm [Your Name], and I'm excited to present Conflux Box for the Code Without Borders SummerHackfest 2025.
+"Hi, I'm @cfxdevkit, and I'm excited to present Conflux Box for the Code Without Borders SummerHackfest 2025.
 
-Conflux Box is a modern, beautiful frontend for Conflux blockchain development, built with Mantine UI and powered by the official Conflux DevKit packages.
+Conflux Box is a modern, beautiful frontend for Conflux blockchain development, built with Mantine UI and powered by preview versions of the upcoming Conflux DevKit packages.
 
 The problem we're solving is that Conflux development lacked a modern, user-friendly interface that developers could use to easily interact with both Core Space and eSpace networks."
 ```
@@ -29,7 +29,7 @@ The problem we're solving is that Conflux development lacked a modern, user-frie
 - Account creation and management tools
 - Smart contract deployment and interaction
 - Seamless switching between Conflux Core and eSpace networks
-- Integration with the official published DevKit packages
+- Integration with preview versions of the upcoming DevKit packages
 
 This makes Conflux development more accessible and enjoyable for developers of all skill levels."
 ```
@@ -72,7 +72,7 @@ This makes Conflux development more accessible and enjoyable for developers of a
 6. **DevKit Integration** (30s)
    - Show backend service running
    - Highlight real-time WebSocket updates
-   - Demonstrate published package integration
+   - Demonstrate DevKit preview integration
 
 ```
 Script for Demo Section:
@@ -88,7 +88,7 @@ In the Contracts section, we have a powerful deployment wizard with pre-built te
 
 The Protocols section showcases real DeFi integration - here you can access GinsenSwap for DEX trading and Meson Bridge for cross-chain transfers. These integrations work on both testnet and mainnet, providing real utility to developers.
 
-Everything is powered by the official Conflux DevKit packages, providing real-time updates through WebSocket integration."
+Everything is powered by preview versions of the upcoming Conflux DevKit packages, providing real-time updates through WebSocket integration."
 ```
 
 ### 4. Technical Implementation (60 seconds)
@@ -98,12 +98,12 @@ Everything is powered by the official Conflux DevKit packages, providing real-ti
 
 - React and TypeScript for type safety and modern development
 - Mantine UI for beautiful, accessible components
-- The official @conflux-devkit/node and @conflux-devkit/backend packages
+- Preview versions of @conflux-devkit/node and @conflux-devkit/backend packages
 - Real-time WebSocket integration for live updates
 - Zustand and React Query for state management
 - Comprehensive test suite with 14 passing tests
 
-The key innovation is using the published DevKit packages, making this a reference implementation for how to build modern Conflux applications.
+The key innovation is using preview versions of the upcoming DevKit packages, making this a reference implementation for how to build modern Conflux applications before the official release.
 
 We overcame challenges in creating a seamless dual-chain experience and ensuring real-time synchronization with blockchain state."
 ```

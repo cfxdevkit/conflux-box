@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useAuthStore } from '../stores/authStore';
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useAuthStore } from "../stores/authStore";
 
 // Mock the API service
-vi.mock('../services/api', () => ({
+vi.mock("../services/api", () => ({
   DevKitApiService: {
     getAuthChallenge: vi.fn(),
     authenticate: vi.fn(),
@@ -10,7 +10,7 @@ vi.mock('../services/api', () => ({
   },
 }));
 
-describe('AuthStore', () => {
+describe("AuthStore", () => {
   beforeEach(() => {
     // Reset store state before each test
     useAuthStore.setState({
@@ -23,7 +23,7 @@ describe('AuthStore', () => {
     });
   });
 
-  it('should have default state', () => {
+  it("should have default state", () => {
     const state = useAuthStore.getState();
 
     expect(state.isConnected).toBe(false);
@@ -34,14 +34,14 @@ describe('AuthStore', () => {
     expect(state.authRefused).toBe(false);
   });
 
-  it('should disconnect', () => {
+  it("should disconnect", () => {
     const { disconnect } = useAuthStore.getState();
 
     // Set some connected state first
     useAuthStore.setState({
       isConnected: true,
-      walletAddress: '0x123',
-      sessionId: 'test-session',
+      walletAddress: "0x123",
+      sessionId: "test-session",
       isAdmin: true,
     });
 
@@ -55,7 +55,7 @@ describe('AuthStore', () => {
     expect(state.isAdmin).toBe(false);
   });
 
-  it('should clear refusal', () => {
+  it("should clear refusal", () => {
     const { clearRefusal } = useAuthStore.getState();
 
     // Set refused state

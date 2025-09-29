@@ -2,7 +2,7 @@
 
 ## System Overview
 
-Conflux Box is designed as a modern, layered frontend application that showcases the proper use of published Conflux DevKit packages. The architecture emphasizes developer experience, real-time data synchronization, and maintainable code structure.
+Conflux Box is designed as a modern, layered frontend application that showcases the proper use of preview versions of the upcoming Conflux DevKit packages. The architecture emphasizes developer experience, real-time data synchronization, and maintainable code structure.
 
 ## High-Level Architecture
 
@@ -99,7 +99,7 @@ src/
 
 ### DevKit Package Usage
 
-Conflux Box leverages the official Conflux DevKit packages:
+Conflux Box leverages preview versions of the upcoming Conflux DevKit packages:
 
 #### @conflux-devkit/backend (v0.1.0)
 
@@ -401,4 +401,4 @@ Local Development Setup:
 
 ---
 
-This architecture provides a solid foundation for modern Conflux application development while showcasing best practices for using the published DevKit packages.
+This architecture provides a solid foundation for modern Conflux application development while showcasing best practices for using the preview DevKit packages.
