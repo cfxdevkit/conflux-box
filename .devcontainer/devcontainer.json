@@ -12,11 +12,6 @@
     }
   },
   "forwardPorts": [3000, 5173, 9229],
-  "postCreateCommand": [
-    "bash -lc 'if ! command -v pnpm >/dev/null 2>&1; then echo Installing pnpm... && npm i -g pnpm@8; fi'",
-    "pnpm install --no-frozen-lockfile || npm install",
-    "echo 'OpenSSL version:' && openssl version"
-  ],
-  "remoteUser": "vscode",
+  "postCreateCommand": "npm i -g pnpm@8 && pnpm install",
   "features": {}
 }
