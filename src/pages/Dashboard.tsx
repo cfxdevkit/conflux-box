@@ -43,6 +43,24 @@ export default function Dashboard() {
   // Fetch block numbers for the current network
   const { data: blockNumbers } = useBlockNumbers(currentNetwork as 'local' | 'testnet' | 'mainnet');
 
+  // Get chain IDs based on selected network
+  const getChainIds = (network: string) => {
+    switch (network) {
+      case 'testnet':
+        return { core: 1, evm: 71 };
+      case 'mainnet':
+        return { core: 1029, evm: 1030 };
+      case 'local':
+      default:
+        return {
+          core: status?.config?.chainId || 2029,
+          evm: status?.config?.evmChainId || 2030
+        };
+    }
+  };
+
+  const chainIds = getChainIds(currentNetwork);
+
   // Get Core block number - use direct RPC calls since backend API doesn't provide block numbers
   const coreBlockNumber =
     currentNetwork === 'local'
@@ -133,11 +151,11 @@ export default function Dashboard() {
             <Stack gap="sm">
               <Group justify="space-between">
                 <Text>Chain ID (Core)</Text>
-                <Badge variant="light">{status?.config?.chainId || '2029'}</Badge>
+                <Badge variant="light">{chainIds.core}</Badge>
               </Group>
               <Group justify="space-between">
                 <Text>Chain ID (eSpace)</Text>
-                <Badge variant="light">{status?.config?.evmChainId || '2030'}</Badge>
+                <Badge variant="light">{chainIds.evm}</Badge>
               </Group>
               <Group justify="space-between">
                 <Text>Core RPC</Text>
