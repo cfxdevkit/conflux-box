@@ -9,8 +9,8 @@ import {
   Text,
   TextInput,
   Title,
-} from "@mantine/core";
-import { IconDeviceFloppy, IconRefresh } from "@tabler/icons-react";
+} from '@mantine/core';
+import { IconDeviceFloppy, IconRefresh } from '@tabler/icons-react';
 
 export default function Settings() {
   return (
@@ -21,9 +21,7 @@ export default function Settings() {
           <Button leftSection={<IconRefresh size={16} />} variant="light">
             Reset
           </Button>
-          <Button leftSection={<IconDeviceFloppy size={16} />}>
-            Save Changes
-          </Button>
+          <Button leftSection={<IconDeviceFloppy size={16} />}>Save Changes</Button>
         </Group>
       </Group>
 
@@ -44,19 +42,15 @@ export default function Settings() {
               label="Network Mode"
               placeholder="Select mode"
               data={[
-                { value: "local", label: "Local Development" },
-                { value: "testnet", label: "Testnet" },
-                { value: "mainnet", label: "Mainnet" },
+                { value: 'local', label: 'Local Development' },
+                { value: 'testnet', label: 'Testnet' },
+                { value: 'mainnet', label: 'Mainnet' },
               ]}
               defaultValue="local"
             />
           </Group>
           <Group grow>
-            <Switch
-              label="Auto Mining"
-              description="Automatically mine blocks"
-              defaultChecked
-            />
+            <Switch label="Auto Mining" description="Automatically mine blocks" defaultChecked />
             <Switch
               label="Instant Mining"
               description="Mine blocks immediately on transaction"
@@ -100,9 +94,9 @@ export default function Settings() {
             label="Theme"
             placeholder="Select theme"
             data={[
-              { value: "auto", label: "Auto (System)" },
-              { value: "light", label: "Light" },
-              { value: "dark", label: "Dark" },
+              { value: 'auto', label: 'Auto (System)' },
+              { value: 'light', label: 'Light' },
+              { value: 'dark', label: 'Dark' },
             ]}
             defaultValue="auto"
           />

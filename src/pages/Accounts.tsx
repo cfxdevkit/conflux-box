@@ -15,8 +15,8 @@ import {
   Textarea,
   Title,
   Tooltip,
-} from "@mantine/core";
-import { notifications } from "@mantine/notifications";
+} from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 import {
   IconCheck,
   IconCopy,
@@ -26,49 +26,40 @@ import {
   IconSend,
   IconSignature,
   IconWallet,
-} from "@tabler/icons-react";
-import React from "react";
-import {
-  useAutoAccounts,
-  useSendTransaction,
-  useSignWithDevKitAccount,
-} from "../hooks/useDevKit";
-import { useAuthStore } from "../stores/authStore";
+} from '@tabler/icons-react';
+import React from 'react';
+import { useAutoAccounts, useSendTransaction, useSignWithDevKitAccount } from '../hooks/useDevKit';
+import { useAuthStore } from '../stores/authStore';
 
 export default function Accounts() {
   const { isConnected } = useAuthStore();
   const { data: accountsData, isLoading, refetch } = useAutoAccounts();
-  const accounts = Array.isArray(accountsData)
-    ? accountsData
-    : accountsData?.accounts || [];
+  const accounts = Array.isArray(accountsData) ? accountsData : accountsData?.accounts || [];
 
   const sendMutation = useSendTransaction();
   const signMutation = useSignWithDevKitAccount();
 
-  const [selectedAccount, setSelectedAccount] = React.useState<string>("0");
-  const [activeTab, setActiveTab] = React.useState("overview");
+  const [selectedAccount, setSelectedAccount] = React.useState<string>('0');
+  const [activeTab, setActiveTab] = React.useState('overview');
 
   // Transfer form state
-  const [transferTo, setTransferTo] = React.useState("");
-  const [transferAmount, setTransferAmount] = React.useState<number | "">("");
-  const [transferChain, setTransferChain] = React.useState<"core" | "evm">(
-    "core"
-  );
+  const [transferTo, setTransferTo] = React.useState('');
+  const [transferAmount, setTransferAmount] = React.useState<number | ''>('');
+  const [transferChain, setTransferChain] = React.useState<'core' | 'evm'>('core');
 
   // Sign message state
-  const [message, setMessage] = React.useState("Hello from Conflux DevKit!");
-  const [signChain, setSignChain] = React.useState<"core" | "evm">("core");
-  const [signature, setSignature] = React.useState<string>("");
+  const [message, setMessage] = React.useState('Hello from Conflux DevKit!');
+  const [signChain, setSignChain] = React.useState<'core' | 'evm'>('core');
+  const [signature, setSignature] = React.useState<string>('');
 
-  const selectedAccountData =
-    accounts?.[parseInt(selectedAccount)] || accounts?.[0];
+  const selectedAccountData = accounts?.[parseInt(selectedAccount, 10)] || accounts?.[0];
 
   const handleTransfer = async () => {
     if (!transferTo.trim() || !transferAmount) {
       notifications.show({
-        title: "Error",
-        message: "Please fill in recipient address and amount",
-        color: "red",
+        title: 'Error',
+        message: 'Please fill in recipient address and amount',
+        color: 'red',
       });
       return;
     }
@@ -78,23 +69,22 @@ export default function Accounts() {
         to: transferTo.trim(),
         value: transferAmount.toString(),
         chain: transferChain,
-        accountIndex: parseInt(selectedAccount),
+        accountIndex: parseInt(selectedAccount, 10),
       });
 
       notifications.show({
-        title: "Transfer Sent",
+        title: 'Transfer Sent',
         message: `Transaction hash: ${result.transactionHash}`,
-        color: "green",
+        color: 'green',
       });
 
-      setTransferTo("");
-      setTransferAmount("");
+      setTransferTo('');
+      setTransferAmount('');
     } catch (error) {
       notifications.show({
-        title: "Transfer Failed",
-        message:
-          error instanceof Error ? error.message : "Failed to send transaction",
-        color: "red",
+        title: 'Transfer Failed',
+        message: error instanceof Error ? error.message : 'Failed to send transaction',
+        color: 'red',
       });
     }
   };
@@ -102,32 +92,31 @@ export default function Accounts() {
   const handleSign = async () => {
     if (!message.trim()) {
       notifications.show({
-        title: "Error",
-        message: "Please enter a message to sign",
-        color: "red",
+        title: 'Error',
+        message: 'Please enter a message to sign',
+        color: 'red',
       });
       return;
     }
 
     try {
       const result = await signMutation.mutateAsync({
-        accountIndex: parseInt(selectedAccount),
+        accountIndex: parseInt(selectedAccount, 10),
         message: message.trim(),
         chain: signChain,
       });
 
       setSignature(result.signature);
       notifications.show({
-        title: "Message Signed",
-        message: "Message successfully signed",
-        color: "green",
+        title: 'Message Signed',
+        message: 'Message successfully signed',
+        color: 'green',
       });
     } catch (error) {
       notifications.show({
-        title: "Signing Failed",
-        message:
-          error instanceof Error ? error.message : "Failed to sign message",
-        color: "red",
+        title: 'Signing Failed',
+        message: error instanceof Error ? error.message : 'Failed to sign message',
+        color: 'red',
       });
     }
   };
@@ -138,9 +127,7 @@ export default function Accounts() {
         <Title order={2}>Accounts</Title>
         <Card withBorder padding="lg" radius="md">
           <Alert icon={<IconInfoCircle size={16} />} color="blue">
-            <Text size="sm">
-              Connect your wallet to access DevKit account management features.
-            </Text>
+            <Text size="sm">Connect your wallet to access DevKit account management features.</Text>
           </Alert>
         </Card>
       </Stack>
@@ -176,10 +163,7 @@ export default function Accounts() {
         </Card>
       ) : (
         <Card withBorder padding="lg" radius="md">
-          <Tabs
-            value={activeTab}
-            onChange={(value) => setActiveTab(value || "overview")}
-          >
+          <Tabs value={activeTab} onChange={(value) => setActiveTab(value || 'overview')}>
             <Tabs.List>
               <Tabs.Tab value="overview" leftSection={<IconWallet size={16} />}>
                 Account Overview
@@ -187,10 +171,7 @@ export default function Accounts() {
               <Tabs.Tab value="transfer" leftSection={<IconSend size={16} />}>
                 Transfer CFX
               </Tabs.Tab>
-              <Tabs.Tab
-                value="signing"
-                leftSection={<IconSignature size={16} />}
-              >
+              <Tabs.Tab value="signing" leftSection={<IconSignature size={16} />}>
                 Message Signing
               </Tabs.Tab>
             </Tabs.List>
@@ -201,7 +182,7 @@ export default function Accounts() {
                   <Select
                     label="Select Account"
                     value={selectedAccount}
-                    onChange={(value) => setSelectedAccount(value || "0")}
+                    onChange={(value) => setSelectedAccount(value || '0')}
                     data={
                       accounts?.map((account: any, index: number) => ({
                         value: index.toString(),
@@ -220,13 +201,13 @@ export default function Accounts() {
                         Account {selectedAccount}
                       </Text>
                       <Group gap="xs">
-                        {parseInt(selectedAccount) === 0 && (
+                        {parseInt(selectedAccount, 10) === 0 && (
                           <Badge size="sm" color="red">
                             Admin
                           </Badge>
                         )}
                         <Badge size="sm" color="blue">
-                          Balance: {selectedAccountData.balance || "0"} CFX
+                          Balance: {selectedAccountData.balance || '0'} CFX
                         </Badge>
                       </Group>
                     </Group>
@@ -237,31 +218,23 @@ export default function Accounts() {
                           Core Address:
                         </Text>
                         <Group gap="xs">
-                          <Code style={{ fontSize: "11px" }}>
-                            {selectedAccountData.addresses?.core ||
-                              selectedAccountData.address}
+                          <Code style={{ fontSize: '11px' }}>
+                            {selectedAccountData.addresses?.core || selectedAccountData.address}
                           </Code>
                           <CopyButton
                             value={
-                              selectedAccountData.addresses?.core ||
-                              selectedAccountData.address
+                              selectedAccountData.addresses?.core || selectedAccountData.address
                             }
                           >
                             {({ copied, copy }) => (
-                              <Tooltip
-                                label={copied ? "Copied!" : "Copy address"}
-                              >
+                              <Tooltip label={copied ? 'Copied!' : 'Copy address'}>
                                 <ActionIcon
                                   size="sm"
-                                  color={copied ? "teal" : "gray"}
+                                  color={copied ? 'teal' : 'gray'}
                                   variant="subtle"
                                   onClick={copy}
                                 >
-                                  {copied ? (
-                                    <IconCheck size={14} />
-                                  ) : (
-                                    <IconCopy size={14} />
-                                  )}
+                                  {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
                                 </ActionIcon>
                               </Tooltip>
                             )}
@@ -275,27 +248,19 @@ export default function Accounts() {
                             eSpace Address:
                           </Text>
                           <Group gap="xs">
-                            <Code style={{ fontSize: "11px" }}>
+                            <Code style={{ fontSize: '11px' }}>
                               {selectedAccountData.addresses.evm}
                             </Code>
-                            <CopyButton
-                              value={selectedAccountData.addresses.evm}
-                            >
+                            <CopyButton value={selectedAccountData.addresses.evm}>
                               {({ copied, copy }) => (
-                                <Tooltip
-                                  label={copied ? "Copied!" : "Copy address"}
-                                >
+                                <Tooltip label={copied ? 'Copied!' : 'Copy address'}>
                                   <ActionIcon
                                     size="sm"
-                                    color={copied ? "teal" : "gray"}
+                                    color={copied ? 'teal' : 'gray'}
                                     variant="subtle"
                                     onClick={copy}
                                   >
-                                    {copied ? (
-                                      <IconCheck size={14} />
-                                    ) : (
-                                      <IconCopy size={14} />
-                                    )}
+                                    {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
                                   </ActionIcon>
                                 </Tooltip>
                               )}
@@ -312,22 +277,18 @@ export default function Accounts() {
             <Tabs.Panel value="transfer" pt="md">
               <Stack gap="md">
                 <Alert icon={<IconInfoCircle size={16} />} color="blue">
-                  <Text size="sm">
-                    Send CFX from your selected DevKit account to any address.
-                  </Text>
+                  <Text size="sm">Send CFX from your selected DevKit account to any address.</Text>
                 </Alert>
 
                 <Group gap="md" grow>
                   <Select
                     label="From Account"
                     value={selectedAccount}
-                    onChange={(value) => setSelectedAccount(value || "0")}
+                    onChange={(value) => setSelectedAccount(value || '0')}
                     data={
                       accounts?.map((account: any, index: number) => ({
                         value: index.toString(),
-                        label: `Account ${index} (${
-                          account.balance || "0"
-                        } CFX)`,
+                        label: `Account ${index} (${account.balance || '0'} CFX)`,
                       })) || []
                     }
                     disabled={sendMutation.isPending}
@@ -336,12 +297,10 @@ export default function Accounts() {
                   <Select
                     label="Chain"
                     value={transferChain}
-                    onChange={(value) =>
-                      setTransferChain(value as "core" | "evm")
-                    }
+                    onChange={(value) => setTransferChain(value as 'core' | 'evm')}
                     data={[
-                      { value: "core", label: "Core Space" },
-                      { value: "evm", label: "eSpace (EVM)" },
+                      { value: 'core', label: 'Core Space' },
+                      { value: 'evm', label: 'eSpace (EVM)' },
                     ]}
                     disabled={sendMutation.isPending}
                   />
@@ -361,11 +320,7 @@ export default function Accounts() {
                   placeholder="Enter amount to send..."
                   value={transferAmount}
                   onChange={(value) =>
-                    setTransferAmount(
-                      typeof value === "string"
-                        ? parseFloat(value) || ""
-                        : value
-                    )
+                    setTransferAmount(typeof value === 'string' ? parseFloat(value) || '' : value)
                   }
                   disabled={sendMutation.isPending}
                   min={0}
@@ -388,8 +343,7 @@ export default function Accounts() {
               <Stack gap="md">
                 <Alert icon={<IconInfoCircle size={16} />} color="blue">
                   <Text size="sm">
-                    Sign messages using DevKit managed accounts for testing
-                    authentication flows.
+                    Sign messages using DevKit managed accounts for testing authentication flows.
                   </Text>
                 </Alert>
 
@@ -397,7 +351,7 @@ export default function Accounts() {
                   <Select
                     label="DevKit Account"
                     value={selectedAccount}
-                    onChange={(value) => setSelectedAccount(value || "0")}
+                    onChange={(value) => setSelectedAccount(value || '0')}
                     data={
                       accounts?.map((account: any, index: number) => ({
                         value: index.toString(),
@@ -412,10 +366,10 @@ export default function Accounts() {
                   <Select
                     label="Chain"
                     value={signChain}
-                    onChange={(value) => setSignChain(value as "core" | "evm")}
+                    onChange={(value) => setSignChain(value as 'core' | 'evm')}
                     data={[
-                      { value: "core", label: "Core Space" },
-                      { value: "evm", label: "eSpace (EVM)" },
+                      { value: 'core', label: 'Core Space' },
+                      { value: 'evm', label: 'eSpace (EVM)' },
                     ]}
                     disabled={signMutation.isPending}
                   />
@@ -442,11 +396,7 @@ export default function Accounts() {
                   </Button>
 
                   {signature && (
-                    <Button
-                      variant="light"
-                      color="gray"
-                      onClick={() => setSignature("")}
-                    >
+                    <Button variant="light" color="gray" onClick={() => setSignature('')}>
                       Clear Result
                     </Button>
                   )}
@@ -460,28 +410,19 @@ export default function Accounts() {
                       </Text>
                       <CopyButton value={signature}>
                         {({ copied, copy }) => (
-                          <Tooltip
-                            label={copied ? "Copied!" : "Copy signature"}
-                          >
+                          <Tooltip label={copied ? 'Copied!' : 'Copy signature'}>
                             <ActionIcon
-                              color={copied ? "teal" : "gray"}
+                              color={copied ? 'teal' : 'gray'}
                               variant="subtle"
                               onClick={copy}
                             >
-                              {copied ? (
-                                <IconCheck size={16} />
-                              ) : (
-                                <IconCopy size={16} />
-                              )}
+                              {copied ? <IconCheck size={16} /> : <IconCopy size={16} />}
                             </ActionIcon>
                           </Tooltip>
                         )}
                       </CopyButton>
                     </Group>
-                    <Code
-                      block
-                      style={{ fontSize: "12px", overflowWrap: "break-word" }}
-                    >
+                    <Code block style={{ fontSize: '12px', overflowWrap: 'break-word' }}>
                       {signature}
                     </Code>
 

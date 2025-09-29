@@ -1,7 +1,7 @@
-import { notifications } from "@mantine/notifications";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
-import { create } from "zustand";
+import { notifications } from '@mantine/notifications';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useMemo } from 'react';
+import { create } from 'zustand';
 
 interface WebSocketMessage {
   type: string;
@@ -33,17 +33,17 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     set({ connecting: true, error: null });
 
     try {
-      const ws = new WebSocket("ws://localhost:3002");
+      const ws = new WebSocket('ws://localhost:3002');
 
       ws.onopen = () => {
-        console.log("WebSocket connected to DevKit backend");
+        console.log('WebSocket connected to DevKit backend');
         set({ connected: true, connecting: false, error: null });
 
         // Show connection notification
         notifications.show({
-          title: "WebSocket Connected",
-          message: "Real-time updates are now available",
-          color: "green",
+          title: 'WebSocket Connected',
+          message: 'Real-time updates are now available',
+          color: 'green',
           autoClose: 3000,
         });
       };
@@ -51,7 +51,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
       ws.onmessage = (event) => {
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
-          console.log("WebSocket message received:", message);
+          console.log('WebSocket message received:', message);
 
           // Add to message history
           set((state) => ({
@@ -63,19 +63,19 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
             handleDevKitMessage(message, queryClient);
           }
         } catch (error) {
-          console.error("Failed to parse WebSocket message:", error);
+          console.error('Failed to parse WebSocket message:', error);
         }
       };
 
       ws.onclose = (event) => {
-        console.log("WebSocket disconnected", event.code, event.reason);
+        console.log('WebSocket disconnected', event.code, event.reason);
         set({ connected: false, connecting: false });
 
         // Show disconnection notification
         notifications.show({
-          title: "WebSocket Disconnected",
-          message: "Real-time updates are unavailable",
-          color: "yellow",
+          title: 'WebSocket Disconnected',
+          message: 'Real-time updates are unavailable',
+          color: 'yellow',
           autoClose: 3000,
         });
 
@@ -91,17 +91,17 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
       };
 
       ws.onerror = (error) => {
-        console.error("WebSocket error:", error);
+        console.error('WebSocket error:', error);
         set({
           connected: false,
           connecting: false,
-          error: "WebSocket connection failed",
+          error: 'WebSocket connection failed',
         });
 
         notifications.show({
-          title: "WebSocket Error",
-          message: "Failed to connect to DevKit backend",
-          color: "red",
+          title: 'WebSocket Error',
+          message: 'Failed to connect to DevKit backend',
+          color: 'red',
           autoClose: 5000,
         });
       };
@@ -109,11 +109,11 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
       // Store WebSocket instance for sending messages
       (window as any).__devkit_ws = ws;
     } catch (error) {
-      console.error("Failed to create WebSocket connection:", error);
+      console.error('Failed to create WebSocket connection:', error);
       set({
         connected: false,
         connecting: false,
-        error: "Failed to create WebSocket connection",
+        error: 'Failed to create WebSocket connection',
       });
     }
   },
@@ -121,7 +121,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   disconnect: () => {
     const ws = (window as any).__devkit_ws;
     if (ws) {
-      ws.close(1000, "Client disconnect");
+      ws.close(1000, 'Client disconnect');
       (window as any).__devkit_ws = null;
     }
     set({ connected: false, connecting: false });
@@ -132,7 +132,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     if (ws && ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify(message));
     } else {
-      console.warn("WebSocket not connected, cannot send message");
+      console.warn('WebSocket not connected, cannot send message');
     }
   },
 
@@ -144,15 +144,15 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 // Handle DevKit-specific WebSocket messages
 function handleDevKitMessage(message: WebSocketMessage, queryClient: any) {
   switch (message.type) {
-    case "node-status":
+    case 'node-status':
       // Update DevKit status cache
-      queryClient.setQueryData(["devkit-status"], message.data);
-      queryClient.setQueryData(["public-status"], message.data);
+      queryClient.setQueryData(['devkit-status'], message.data);
+      queryClient.setQueryData(['public-status'], message.data);
       break;
 
-    case "node-started":
+    case 'node-started':
       // Reset mining statistics when node starts
-      queryClient.setQueryData(["devkit-status"], (oldData: any) => {
+      queryClient.setQueryData(['devkit-status'], (oldData: any) => {
         if (!oldData) return oldData;
 
         const updatedData = { ...oldData };
@@ -168,7 +168,7 @@ function handleDevKitMessage(message: WebSocketMessage, queryClient: any) {
         return updatedData;
       });
 
-      queryClient.setQueryData(["public-status"], (oldData: any) => {
+      queryClient.setQueryData(['public-status'], (oldData: any) => {
         if (!oldData) return oldData;
 
         const updatedData = { ...oldData };
@@ -185,43 +185,43 @@ function handleDevKitMessage(message: WebSocketMessage, queryClient: any) {
       });
 
       // Refresh all relevant queries
-      queryClient.invalidateQueries({ queryKey: ["devkit-accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["devkit-balance"] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-balance'] });
 
       notifications.show({
-        title: "DevKit Node Started",
-        message: "Node is running and mining statistics reset",
-        color: "green",
+        title: 'DevKit Node Started',
+        message: 'Node is running and mining statistics reset',
+        color: 'green',
         autoClose: 3000,
       });
       break;
 
-    case "block-mined":
+    case 'block-mined':
       // Update current status with new block number
-      queryClient.setQueryData(["devkit-status"], (oldData: any) => {
+      queryClient.setQueryData(['devkit-status'], (oldData: any) => {
         if (!oldData) return oldData;
 
         const updatedData = { ...oldData };
         if (!updatedData.network) updatedData.network = {};
 
-        if (message.data.chain === "core") {
+        if (message.data.chain === 'core') {
           updatedData.network.blockNumber = message.data.blockNumber;
-        } else if (message.data.chain === "evm") {
+        } else if (message.data.chain === 'evm') {
           updatedData.network.evmBlockNumber = message.data.blockNumber;
         }
 
         return updatedData;
       });
 
-      queryClient.setQueryData(["public-status"], (oldData: any) => {
+      queryClient.setQueryData(['public-status'], (oldData: any) => {
         if (!oldData) return oldData;
 
         const updatedData = { ...oldData };
         if (!updatedData.network) updatedData.network = {};
 
-        if (message.data.chain === "core") {
+        if (message.data.chain === 'core') {
           updatedData.network.blockNumber = message.data.blockNumber;
-        } else if (message.data.chain === "evm") {
+        } else if (message.data.chain === 'evm') {
           updatedData.network.evmBlockNumber = message.data.blockNumber;
         }
 
@@ -229,82 +229,83 @@ function handleDevKitMessage(message: WebSocketMessage, queryClient: any) {
       });
 
       // Update block numbers cache
-      queryClient.setQueryData(["block-numbers"], (oldData: any) => {
+      queryClient.setQueryData(['block-numbers'], (oldData: any) => {
         const currentData = oldData || { core: null, evm: null };
-        if (message.data.chain === "core") {
+        if (message.data.chain === 'core') {
           return { ...currentData, core: message.data.blockNumber };
-        } else if (message.data.chain === "evm") {
+        } else if (message.data.chain === 'evm') {
           return { ...currentData, evm: message.data.blockNumber };
         }
         return currentData;
       });
 
       // Invalidate account balances and status
-      queryClient.invalidateQueries({ queryKey: ["devkit-accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["devkit-balance"] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-balance'] });
 
       // Show notification for new block
       notifications.show({
-        title: "Block Mined",
+        title: 'Block Mined',
         message: `New ${message.data.chain} block #${message.data.blockNumber}`,
-        color: "blue",
+        color: 'blue',
         autoClose: 2000,
       });
       break;
 
-    case "network-switched":
+    case 'network-switched':
       // Update network cache and invalidate network-dependent data
-      queryClient.setQueryData(["devkit-network"], message.data);
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-      queryClient.invalidateQueries({ queryKey: ["devkit-accounts"] });
+      queryClient.setQueryData(['devkit-network'], message.data);
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
 
       notifications.show({
-        title: "Network Switched",
+        title: 'Network Switched',
         message: `Switched to ${message.data.network}`,
-        color: "indigo",
+        color: 'indigo',
         autoClose: 3000,
       });
       break;
 
-    case "balance-changed":
+    case 'balance-changed': {
       // Update specific account balance
       const accountIndex = message.data.accountIndex;
       if (accountIndex !== undefined) {
         queryClient.invalidateQueries({
-          queryKey: ["devkit-balance", accountIndex],
+          queryKey: ['devkit-balance', accountIndex],
         });
         queryClient.invalidateQueries({
-          queryKey: ["devkit-account", accountIndex],
+          queryKey: ['devkit-account', accountIndex],
         });
       }
-      queryClient.invalidateQueries({ queryKey: ["devkit-accounts"] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
       break;
+    }
 
-    case "transaction-confirmed":
+    case 'transaction-confirmed':
       // Invalidate relevant caches
-      queryClient.invalidateQueries({ queryKey: ["devkit-accounts"] });
-      queryClient.invalidateQueries({ queryKey: ["devkit-balance"] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-accounts'] });
+      queryClient.invalidateQueries({ queryKey: ['devkit-balance'] });
 
       notifications.show({
-        title: "Transaction Confirmed",
+        title: 'Transaction Confirmed',
         message: `Transaction ${message.data.hash.slice(0, 10)}... confirmed`,
-        color: "green",
+        color: 'green',
         autoClose: 4000,
       });
       break;
 
-    case "contract-deployed":
+    case 'contract-deployed':
       // Show deployment notification
       notifications.show({
-        title: "Contract Deployed",
+        title: 'Contract Deployed',
         message: `Contract deployed at ${message.data.address.slice(0, 10)}...`,
-        color: "teal",
+        color: 'teal',
         autoClose: 5000,
       });
       break;
 
     default:
-      console.log("Unhandled WebSocket message type:", message.type);
+      console.log('Unhandled WebSocket message type:', message.type);
   }
 }
 

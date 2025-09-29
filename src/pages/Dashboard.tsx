@@ -12,7 +12,7 @@ import {
   Text,
   ThemeIcon,
   Title,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   IconActivity,
   IconAlertCircle,
@@ -22,14 +22,14 @@ import {
   IconPlayerStop,
   IconRefresh,
   IconWallet,
-} from "@tabler/icons-react";
+} from '@tabler/icons-react';
 import {
   useAutoDevKitStatus,
   useBlockNumbers,
   useCurrentNetwork,
   useStartNode,
   useStopNode,
-} from "../hooks/useDevKit";
+} from '../hooks/useDevKit';
 
 export default function Dashboard() {
   const { data: status, isLoading, refetch } = useAutoDevKitStatus();
@@ -37,46 +37,44 @@ export default function Dashboard() {
   const startNodeMutation = useStartNode();
   const stopNodeMutation = useStopNode();
 
-  const currentNetwork = currentNetworkData?.network || "local";
+  const currentNetwork = currentNetworkData?.network || 'local';
   const nodeRunning = status?.running || false;
 
   // Fetch block numbers for the current network
-  const { data: blockNumbers } = useBlockNumbers(
-    currentNetwork as "local" | "testnet" | "mainnet"
-  );
+  const { data: blockNumbers } = useBlockNumbers(currentNetwork as 'local' | 'testnet' | 'mainnet');
 
   // Get Core block number - use direct RPC calls since backend API doesn't provide block numbers
   const coreBlockNumber =
-    currentNetwork === "local"
+    currentNetwork === 'local'
       ? nodeRunning
-        ? blockNumbers?.core ?? "---"
-        : "---"
-      : blockNumbers?.core ?? "---";
+        ? (blockNumbers?.core ?? '---')
+        : '---'
+      : (blockNumbers?.core ?? '---');
 
   const stats = [
     {
-      title: "Node Status",
-      value: nodeRunning ? "Running" : "Stopped",
+      title: 'Node Status',
+      value: nodeRunning ? 'Running' : 'Stopped',
       icon: IconActivity,
-      color: nodeRunning ? "green" : "red",
+      color: nodeRunning ? 'green' : 'red',
     },
     {
-      title: "Active Accounts",
+      title: 'Active Accounts',
       value: status?.accounts || 0,
       icon: IconWallet,
-      color: "blue",
+      color: 'blue',
     },
     {
-      title: "Mining Status",
-      value: status?.mining?.isRunning ? "Active" : "Inactive",
+      title: 'Mining Status',
+      value: status?.mining?.isRunning ? 'Active' : 'Inactive',
       icon: IconCode,
-      color: status?.mining?.isRunning ? "green" : "gray",
+      color: status?.mining?.isRunning ? 'green' : 'gray',
     },
     {
-      title: "Core Block Number",
+      title: 'Core Block Number',
       value: coreBlockNumber,
       icon: IconNetwork,
-      color: coreBlockNumber !== "---" ? "orange" : "gray",
+      color: coreBlockNumber !== '---' ? 'orange' : 'gray',
     },
   ];
 
@@ -121,11 +119,11 @@ export default function Dashboard() {
               <Title order={4}>Network Information</Title>
               <Badge
                 color={
-                  currentNetwork === "local"
-                    ? "green"
-                    : currentNetwork === "testnet"
-                    ? "yellow"
-                    : "blue"
+                  currentNetwork === 'local'
+                    ? 'green'
+                    : currentNetwork === 'testnet'
+                      ? 'yellow'
+                      : 'blue'
                 }
               >
                 {currentNetwork.toUpperCase()}
@@ -135,39 +133,35 @@ export default function Dashboard() {
             <Stack gap="sm">
               <Group justify="space-between">
                 <Text>Chain ID (Core)</Text>
-                <Badge variant="light">
-                  {status?.config?.chainId || "2029"}
-                </Badge>
+                <Badge variant="light">{status?.config?.chainId || '2029'}</Badge>
               </Group>
               <Group justify="space-between">
                 <Text>Chain ID (eSpace)</Text>
-                <Badge variant="light">
-                  {status?.config?.evmChainId || "2030"}
-                </Badge>
+                <Badge variant="light">{status?.config?.evmChainId || '2030'}</Badge>
               </Group>
               <Group justify="space-between">
                 <Text>Core RPC</Text>
-                <Text size="sm" c="dimmed" style={{ fontFamily: "monospace" }}>
-                  {currentNetwork === "local"
-                    ? status?.rpcUrls?.core || "http://localhost:12537"
-                    : currentNetwork === "testnet"
-                    ? "https://test.confluxrpc.com"
-                    : "https://main.confluxrpc.com"}
+                <Text size="sm" c="dimmed" style={{ fontFamily: 'monospace' }}>
+                  {currentNetwork === 'local'
+                    ? status?.rpcUrls?.core || 'http://localhost:12537'
+                    : currentNetwork === 'testnet'
+                      ? 'https://test.confluxrpc.com'
+                      : 'https://main.confluxrpc.com'}
                 </Text>
               </Group>
               <Group justify="space-between">
                 <Text>eSpace RPC</Text>
-                <Text size="sm" c="dimmed" style={{ fontFamily: "monospace" }}>
-                  {currentNetwork === "local"
-                    ? status?.rpcUrls?.evm || "http://localhost:8545"
-                    : currentNetwork === "testnet"
-                    ? "https://evmtestnet.confluxrpc.com"
-                    : "https://evm.confluxrpc.com"}
+                <Text size="sm" c="dimmed" style={{ fontFamily: 'monospace' }}>
+                  {currentNetwork === 'local'
+                    ? status?.rpcUrls?.evm || 'http://localhost:8545'
+                    : currentNetwork === 'testnet'
+                      ? 'https://evmtestnet.confluxrpc.com'
+                      : 'https://evm.confluxrpc.com'}
                 </Text>
               </Group>
             </Stack>
 
-            {currentNetwork === "local" && (
+            {currentNetwork === 'local' && (
               <>
                 <Divider my="md" />
                 <Group justify="space-between">
@@ -177,12 +171,12 @@ export default function Dashboard() {
                       size="xs"
                       leftSection={<IconPlayerPlay size={14} />}
                       color="green"
-                      variant={nodeRunning ? "light" : "filled"}
+                      variant={nodeRunning ? 'light' : 'filled'}
                       disabled={nodeRunning || startNodeMutation.isPending}
                       onClick={() => startNodeMutation.mutate()}
                       loading={startNodeMutation.isPending}
                     >
-                      {nodeRunning ? "Running" : "Start Node"}
+                      {nodeRunning ? 'Running' : 'Start Node'}
                     </Button>
                     <Button
                       size="xs"
@@ -199,13 +193,12 @@ export default function Dashboard() {
               </>
             )}
 
-            {currentNetwork !== "local" && (
+            {currentNetwork !== 'local' && (
               <>
                 <Divider my="md" />
                 <Alert icon={<IconAlertCircle size={16} />} color="blue">
                   <Text size="sm">
-                    Connected to remote {currentNetwork} network. RPC health
-                    monitoring available.
+                    Connected to remote {currentNetwork} network. RPC health monitoring available.
                   </Text>
                 </Alert>
               </>
@@ -222,43 +215,35 @@ export default function Dashboard() {
               <div>
                 <Group justify="space-between" mb={5}>
                   <Text size="sm">Backend API</Text>
-                  <Text size="sm" c={status ? "green" : "red"}>
-                    {status ? "Online" : "Offline"}
+                  <Text size="sm" c={status ? 'green' : 'red'}>
+                    {status ? 'Online' : 'Offline'}
                   </Text>
                 </Group>
-                <Progress
-                  value={status ? 100 : 0}
-                  color={status ? "green" : "red"}
-                  size="sm"
-                />
+                <Progress value={status ? 100 : 0} color={status ? 'green' : 'red'} size="sm" />
               </div>
 
               <div>
                 <Group justify="space-between" mb={5}>
                   <Text size="sm">WebSocket</Text>
-                  <Text size="sm" c={status ? "green" : "gray"}>
-                    {status ? "Connected" : "Disconnected"}
+                  <Text size="sm" c={status ? 'green' : 'gray'}>
+                    {status ? 'Connected' : 'Disconnected'}
                   </Text>
                 </Group>
-                <Progress
-                  value={status ? 100 : 0}
-                  color={status ? "green" : "gray"}
-                  size="sm"
-                />
+                <Progress value={status ? 100 : 0} color={status ? 'green' : 'gray'} size="sm" />
               </div>
 
-              {currentNetwork === "local" && (
+              {currentNetwork === 'local' && (
                 <>
                   <div>
                     <Group justify="space-between" mb={5}>
                       <Text size="sm">Core Chain</Text>
-                      <Text size="sm" c={nodeRunning ? "green" : "gray"}>
-                        {nodeRunning ? "Running" : "Stopped"}
+                      <Text size="sm" c={nodeRunning ? 'green' : 'gray'}>
+                        {nodeRunning ? 'Running' : 'Stopped'}
                       </Text>
                     </Group>
                     <Progress
                       value={nodeRunning ? 100 : 0}
-                      color={nodeRunning ? "green" : "gray"}
+                      color={nodeRunning ? 'green' : 'gray'}
                       size="sm"
                     />
                   </div>
@@ -266,20 +251,20 @@ export default function Dashboard() {
                   <div>
                     <Group justify="space-between" mb={5}>
                       <Text size="sm">eSpace Chain</Text>
-                      <Text size="sm" c={nodeRunning ? "green" : "gray"}>
-                        {nodeRunning ? "Running" : "Stopped"}
+                      <Text size="sm" c={nodeRunning ? 'green' : 'gray'}>
+                        {nodeRunning ? 'Running' : 'Stopped'}
                       </Text>
                     </Group>
                     <Progress
                       value={nodeRunning ? 100 : 0}
-                      color={nodeRunning ? "green" : "gray"}
+                      color={nodeRunning ? 'green' : 'gray'}
                       size="sm"
                     />
                   </div>
                 </>
               )}
 
-              {currentNetwork !== "local" && (
+              {currentNetwork !== 'local' && (
                 <>
                   <div>
                     <Group justify="space-between" mb={5}>

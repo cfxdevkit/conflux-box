@@ -14,39 +14,22 @@ const spinnerStyle = `
 `;
 
 // Inject styles
-if (
-  typeof document !== "undefined" &&
-  !document.querySelector("#meson-spinner-styles")
-) {
-  const style = document.createElement("style");
-  style.id = "meson-spinner-styles";
+if (typeof document !== 'undefined' && !document.querySelector('#meson-spinner-styles')) {
+  const style = document.createElement('style');
+  style.id = 'meson-spinner-styles';
   style.textContent = spinnerStyle;
   document.head.appendChild(style);
 }
 
-import {
-  ActionIcon,
-  Alert,
-  Anchor,
-  Badge,
-  Card,
-  Group,
-  Select,
-  Stack,
-  Text,
-} from "@mantine/core";
-import { MesonToButton } from "@mesonfi/to/react";
-import {
-  IconExternalLink,
-  IconInfoCircle,
-  IconRefresh,
-  IconTransfer,
-} from "@tabler/icons-react";
-import { useQuery } from "@tanstack/react-query";
-import React, { useId, useState } from "react";
-import { DevKitApiService } from "../../services/api";
-import { useAuthStore } from "../../stores/authStore";
-import type { IntegrationComponentProps } from "../types";
+import { ActionIcon, Alert, Anchor, Badge, Card, Group, Select, Stack, Text } from '@mantine/core';
+import { MesonToButton } from '@mesonfi/to/react';
+import { IconExternalLink, IconInfoCircle, IconRefresh, IconTransfer } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import type React from 'react';
+import { useId, useState } from 'react';
+import { DevKitApiService } from '../../services/api';
+import { useAuthStore } from '../../stores/authStore';
+import type { IntegrationComponentProps } from '../types';
 
 interface Account {
   index: number;
@@ -64,12 +47,12 @@ function ButtonContent({ isPending }: { isPending: boolean }) {
       <Group gap="xs">
         <div
           style={{
-            width: "16px",
-            height: "16px",
-            border: "2px solid transparent",
-            borderTop: "2px solid white",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
+            width: '16px',
+            height: '16px',
+            border: '2px solid transparent',
+            borderTop: '2px solid white',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
           }}
         />
         <span>Processing...</span>
@@ -79,13 +62,8 @@ function ButtonContent({ isPending }: { isPending: boolean }) {
 
   return (
     <Group gap="xs">
-      <svg
-        width="16"
-        height="16"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
+      <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <title>Bridge Icon</title>
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -118,16 +96,14 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
 }) => {
   const { sessionId } = useAuthStore();
 
-  const [completedData, setCompletedData] = useState<CompletedData | null>(
-    null
-  );
+  const [completedData, setCompletedData] = useState<CompletedData | null>(null);
   const [isPending, setIsPending] = useState(false);
   const [selectedAccountIndex, setSelectedAccountIndex] = useState<number>(0);
   const selectId = useId();
 
   // Fetch accounts for EVM address
   const { data: accountsData } = useQuery({
-    queryKey: ["devkit-accounts"],
+    queryKey: ['devkit-accounts'],
     queryFn: DevKitApiService.getAllAccounts,
     enabled: !!sessionId,
   });
@@ -138,13 +114,11 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
   }
 
   // Show warning for non-mainnet networks but still allow testing
-  if (currentNetwork !== "mainnet") {
+  if (currentNetwork !== 'mainnet') {
     return (
       <Alert icon={<IconInfoCircle size={16} />} color="yellow">
         <Stack gap="xs">
-          <Text size="sm">
-            Meson Bridge works best on mainnet for cross-chain transfers.
-          </Text>
+          <Text size="sm">Meson Bridge works best on mainnet for cross-chain transfers.</Text>
           <Text size="xs" c="dimmed">
             Limited functionality available on testnet/local networks.
           </Text>
@@ -161,19 +135,19 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
 
   // Handle Meson bridge completion
   const handleCompleted = (data: any) => {
-    console.log("Meson bridge completed:", data);
+    console.log('Meson bridge completed:', data);
     setIsPending(false);
     setCompletedData({
       swapId: data.swapId || `meson_${Date.now()}`,
       amount: data.amount || 0,
       received: data.received || 0,
       from: {
-        chain: data.from?.chain || "Unknown",
-        token: data.from?.token || "Unknown",
+        chain: data.from?.chain || 'Unknown',
+        token: data.from?.token || 'Unknown',
       },
       to: {
-        chain: "conflux",
-        token: data.to?.token || "Unknown",
+        chain: 'conflux',
+        token: data.to?.token || 'Unknown',
       },
     });
     setIsPending(false);
@@ -214,7 +188,7 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
             <ActionIcon
               variant="subtle"
               size="sm"
-              onClick={() => window.open("https://meson.fi", "_blank")}
+              onClick={() => window.open('https://meson.fi', '_blank')}
             >
               <IconExternalLink size={16} />
             </ActionIcon>
@@ -228,8 +202,8 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
               EVM Compatible Only
             </Text>
             <Text size="xs">
-              Meson supports <strong>Conflux eSpace</strong> (EVM-compatible).
-              Core Space is not supported as it's not EVM-compatible.
+              Meson supports <strong>Conflux eSpace</strong> (EVM-compatible). Core Space is not
+              supported as it's not EVM-compatible.
             </Text>
             {!selectedAccount && (
               <Text size="xs" c="yellow">
@@ -248,19 +222,14 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
             <Select
               id={selectId}
               placeholder="Select destination account"
-              data={accountsData.accounts.map(
-                (account: Account, index: number) => ({
-                  value: index.toString(),
-                  label: `Account ${index} (${account.addresses.evm.slice(
-                    0,
-                    10
-                  )}...)`,
-                })
-              )}
+              data={accountsData.accounts.map((account: Account, index: number) => ({
+                value: index.toString(),
+                label: `Account ${index} (${account.addresses.evm.slice(0, 10)}...)`,
+              }))}
               value={selectedAccountIndex.toString()}
               onChange={(value) => {
                 if (value) {
-                  setSelectedAccountIndex(parseInt(value));
+                  setSelectedAccountIndex(parseInt(value, 10));
                 }
               }}
             />
@@ -289,21 +258,20 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
               </Text>
             </Group>
 
-            <div style={{ width: "100%" }}>
+            <div style={{ width: '100%' }}>
               <div
                 style={{
-                  background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  borderRadius: "8px",
-                  overflow: "hidden",
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
                 }}
               >
                 <MesonToButton
                   options={{
-                    to: "cfx",
+                    to: 'cfx',
                     recipient:
                       selectedAccount?.addresses.evm ||
-                      "0x0000000000000000000000000000000000000000",
+                      '0x0000000000000000000000000000000000000000',
                   }}
                   onCompleted={handleCompleted}
                 >
@@ -319,16 +287,15 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
               </Text>
               <Stack gap={4}>
                 <Text size="xs">
-                  1. Visit{" "}
+                  1. Visit{' '}
                   <Anchor href="https://meson.fi" target="_blank" size="xs">
                     meson.fi
-                  </Anchor>{" "}
+                  </Anchor>{' '}
                   directly
                 </Text>
                 <Text size="xs">2. Bridge to Conflux eSpace (CFX)</Text>
                 <Text size="xs">
-                  3. Use address:{" "}
-                  {selectedAccount?.addresses.evm || "Connect account first"}
+                  3. Use address: {selectedAccount?.addresses.evm || 'Connect account first'}
                 </Text>
               </Stack>
             </Alert>
@@ -341,8 +308,8 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
             withBorder
             p="md"
             style={{
-              backgroundColor: "var(--mantine-color-green-0)",
-              borderColor: "var(--mantine-color-green-3)",
+              backgroundColor: 'var(--mantine-color-green-0)',
+              borderColor: 'var(--mantine-color-green-3)',
             }}
           >
             <Stack gap="sm">
@@ -354,13 +321,13 @@ export const MesonBridgeIntegration: React.FC<IntegrationComponentProps> = ({
               </Group>
               <Stack gap="xs">
                 <Text size="xs">
-                  {completedData.amount / 1e6} {completedData.from.token} from{" "}
+                  {completedData.amount / 1e6} {completedData.from.token} from{' '}
                   {completedData.from.chain}
                 </Text>
                 <Group gap="xs">
                   <Text size="xs">→</Text>
                   <Text size="xs">
-                    {completedData.received / 1e6} {completedData.to.token} on{" "}
+                    {completedData.received / 1e6} {completedData.to.token} on{' '}
                     {completedData.to.chain}
                   </Text>
                 </Group>

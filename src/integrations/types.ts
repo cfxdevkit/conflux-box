@@ -5,10 +5,10 @@
  * of new protocols and network-specific filtering.
  */
 
-import React from "react";
+import type React from 'react';
 
-export type NetworkType = "local" | "testnet" | "mainnet";
-export type IntegrationType = "dex" | "bridge" | "lending" | "yield" | "tools";
+export type NetworkType = 'local' | 'testnet' | 'mainnet';
+export type IntegrationType = 'dex' | 'bridge' | 'lending' | 'yield' | 'tools';
 
 export interface IntegrationMetadata {
   id: string;
@@ -61,7 +61,7 @@ export class IntegrationRegistry {
     return this.getAllIntegrations().filter(
       (integration) =>
         integration.metadata.networks.includes(network) ||
-        (integration.metadata.networks.includes("local") && network === "local")
+        (integration.metadata.networks.includes('local') && network === 'local')
     );
   }
 
@@ -72,9 +72,7 @@ export class IntegrationRegistry {
   }
 
   getActiveIntegrations(): Integration[] {
-    return this.getAllIntegrations().filter(
-      (integration) => integration.metadata.isActive
-    );
+    return this.getAllIntegrations().filter((integration) => integration.metadata.isActive);
   }
 }
 

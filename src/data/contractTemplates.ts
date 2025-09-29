@@ -1,4 +1,4 @@
-import { generatedContractTemplates } from "./generatedContractTemplates";
+import { generatedContractTemplates } from './generatedContractTemplates';
 
 export interface ContractTemplate {
   id: string;
@@ -22,10 +22,10 @@ function mapGenerated(): ContractTemplate[] {
 
     if (gen.Storage) {
       templates.push({
-        id: "storage",
-        name: "Storage Contract",
-        description: "Basic storage contract with set/get methods (generated)",
-        category: "Basic",
+        id: 'storage',
+        name: 'Storage Contract',
+        description: 'Basic storage contract with set/get methods (generated)',
+        category: 'Basic',
         constructorArgs: [],
         abi: gen.Storage.abi as any[],
         bytecode: gen.Storage.fullBytecode as string,
@@ -34,10 +34,10 @@ function mapGenerated(): ContractTemplate[] {
 
     if (gen.Counter) {
       templates.push({
-        id: "counter",
-        name: "Counter",
-        description: "Simple counter with increment/decrement (generated)",
-        category: "Basic",
+        id: 'counter',
+        name: 'Counter',
+        description: 'Simple counter with increment/decrement (generated)',
+        category: 'Basic',
         constructorArgs: [],
         abi: gen.Counter.abi as any[],
         bytecode: gen.Counter.fullBytecode as string,
@@ -46,22 +46,22 @@ function mapGenerated(): ContractTemplate[] {
 
     if (gen.SimpleStorage) {
       templates.push({
-        id: "simple-storage",
-        name: "Simple Storage",
-        description: "SimpleStorage with name and value (generated)",
-        category: "Basic",
+        id: 'simple-storage',
+        name: 'Simple Storage',
+        description: 'SimpleStorage with name and value (generated)',
+        category: 'Basic',
         constructorArgs: [
           {
-            name: "name",
-            type: "string",
-            description: "Initial name",
-            defaultValue: "Example",
+            name: 'name',
+            type: 'string',
+            description: 'Initial name',
+            defaultValue: 'Example',
           },
           {
-            name: "initialValue",
-            type: "uint256",
-            description: "Initial value",
-            defaultValue: "0",
+            name: 'initialValue',
+            type: 'uint256',
+            description: 'Initial value',
+            defaultValue: '0',
           },
         ],
         abi: gen.SimpleStorage.abi as any[],
@@ -70,7 +70,7 @@ function mapGenerated(): ContractTemplate[] {
     }
 
     return templates;
-  } catch (e) {
+  } catch (_e) {
     return [];
   }
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button, Group, Badge } from '@mantine/core';
+import { Badge, Button, Group } from '@mantine/core';
 import { IconWallet } from '@tabler/icons-react';
+import React from 'react';
 import { useAuthStore } from '../stores/authStore';
 
 export function DevConnectButton() {
@@ -22,7 +22,7 @@ export function DevConnectButton() {
           isAdmin: session.isAdmin,
           sessionId: session.sessionId,
           isAuthenticating: false,
-          authRefused: false
+          authRefused: false,
         });
 
         console.log('🔧 Connected using development session:', session);
@@ -42,12 +42,7 @@ export function DevConnectButton() {
 
   if (isConnecting || isAuthenticating) {
     return (
-      <Button
-        size="sm"
-        variant="filled"
-        loading
-        leftSection={<IconWallet size={16} />}
-      >
+      <Button size="sm" variant="filled" loading leftSection={<IconWallet size={16} />}>
         Connecting...
       </Button>
     );
@@ -56,23 +51,14 @@ export function DevConnectButton() {
   if (isConnected && walletAddress) {
     return (
       <Group gap="xs">
-        <Badge
-          size="lg"
-          color={isAdmin ? 'red' : 'green'}
-          variant="light"
-        >
+        <Badge size="lg" color={isAdmin ? 'red' : 'green'} variant="light">
           <Group gap={4}>
             <div className={`w-2 h-2 rounded-full ${isAdmin ? 'bg-red-500' : 'bg-green-500'}`} />
             {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
             {isAdmin && ' (Admin)'}
           </Group>
         </Badge>
-        <Button
-          size="sm"
-          variant="subtle"
-          color="red"
-          onClick={handleDisconnect}
-        >
+        <Button size="sm" variant="subtle" color="red" onClick={handleDisconnect}>
           Disconnect
         </Button>
       </Group>

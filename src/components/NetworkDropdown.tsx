@@ -1,48 +1,39 @@
-import { Alert, Badge, Button, Group, Loader, Menu, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import {
-  IconCheck,
-  IconChevronDown,
-  IconLock,
-  IconNetwork,
-} from "@tabler/icons-react";
-import {
-  useAutoDevKitStatus,
-  useCurrentNetwork,
-  useSwitchNetwork,
-} from "../hooks/useDevKit";
+import { Alert, Badge, Button, Group, Loader, Menu, Text } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconChevronDown, IconLock, IconNetwork } from '@tabler/icons-react';
+import { useAutoDevKitStatus, useCurrentNetwork, useSwitchNetwork } from '../hooks/useDevKit';
 
-export type NetworkType = "local" | "testnet" | "mainnet";
+export type NetworkType = 'local' | 'testnet' | 'mainnet';
 
 export function NetworkDropdown() {
   const { data: currentNetworkData } = useCurrentNetwork();
   const { data: devkitStatus } = useAutoDevKitStatus();
   const switchNetworkMutation = useSwitchNetwork();
 
-  const currentNetwork = currentNetworkData?.network || "local";
+  const currentNetwork = currentNetworkData?.network || 'local';
   const nodeRunning = devkitStatus?.running || false;
 
   const networks = [
     {
-      id: "local" as NetworkType,
-      name: "Local",
-      description: "DevKit node",
+      id: 'local' as NetworkType,
+      name: 'Local',
+      description: 'DevKit node',
       available: true,
-      color: "green",
+      color: 'green',
     },
     {
-      id: "testnet" as NetworkType,
-      name: "Testnet",
-      description: "Conflux test network",
+      id: 'testnet' as NetworkType,
+      name: 'Testnet',
+      description: 'Conflux test network',
       available: !nodeRunning,
-      color: "yellow",
+      color: 'yellow',
     },
     {
-      id: "mainnet" as NetworkType,
-      name: "Mainnet",
-      description: "Conflux mainnet",
+      id: 'mainnet' as NetworkType,
+      name: 'Mainnet',
+      description: 'Conflux mainnet',
       available: !nodeRunning,
-      color: "blue",
+      color: 'blue',
     },
   ];
 
@@ -54,10 +45,9 @@ export function NetworkDropdown() {
     if (!networkConfig?.available) {
       if (nodeRunning) {
         notifications.show({
-          title: "Cannot Switch Network",
-          message:
-            "Cannot switch networks while local node is running. Stop the node first.",
-          color: "yellow",
+          title: 'Cannot Switch Network',
+          message: 'Cannot switch networks while local node is running. Stop the node first.',
+          color: 'yellow',
         });
       }
       return;
@@ -70,16 +60,15 @@ export function NetworkDropdown() {
     try {
       await switchNetworkMutation.mutateAsync(network);
       notifications.show({
-        title: "Network Switched",
+        title: 'Network Switched',
         message: `Successfully switched to ${network} network`,
-        color: "green",
+        color: 'green',
       });
     } catch (error) {
       notifications.show({
-        title: "Network Switch Failed",
-        message:
-          error instanceof Error ? error.message : "Failed to switch network",
-        color: "red",
+        title: 'Network Switch Failed',
+        message: error instanceof Error ? error.message : 'Failed to switch network',
+        color: 'red',
       });
     }
   };
@@ -90,22 +79,14 @@ export function NetworkDropdown() {
         <Button
           variant="light"
           leftSection={
-            switchNetworkMutation.isPending ? (
-              <Loader size={12} />
-            ) : (
-              <IconNetwork size={14} />
-            )
+            switchNetworkMutation.isPending ? <Loader size={12} /> : <IconNetwork size={14} />
           }
           rightSection={<IconChevronDown size={12} />}
           disabled={switchNetworkMutation.isPending}
           size="xs"
         >
           <Group gap={6}>
-            <Badge
-              size="xs"
-              color={currentNetworkConfig?.color}
-              variant="dot"
-            />
+            <Badge size="xs" color={currentNetworkConfig?.color} variant="dot" />
             {currentNetworkConfig?.name}
           </Group>
         </Button>
@@ -119,11 +100,7 @@ export function NetworkDropdown() {
               Current Network
             </Text>
             <Group gap={6}>
-              <Badge
-                size="xs"
-                color={currentNetworkConfig?.color}
-                variant="dot"
-              />
+              <Badge size="xs" color={currentNetworkConfig?.color} variant="dot" />
               <Text size="sm">{currentNetworkConfig?.name}</Text>
             </Group>
           </Group>
@@ -142,9 +119,7 @@ export function NetworkDropdown() {
         {networks.map((network) => (
           <Menu.Item
             key={network.id}
-            leftSection={
-              <Badge size="xs" color={network.color} variant="dot" />
-            }
+            leftSection={<Badge size="xs" color={network.color} variant="dot" />}
             rightSection={
               currentNetwork === network.id ? (
                 <IconCheck size={16} color="var(--mantine-color-blue-6)" />
@@ -154,11 +129,7 @@ export function NetworkDropdown() {
             }
             disabled={!network.available || switchNetworkMutation.isPending}
             onClick={() => handleNetworkChange(network.id)}
-            bg={
-              currentNetwork === network.id
-                ? "var(--mantine-color-blue-0)"
-                : undefined
-            }
+            bg={currentNetwork === network.id ? 'var(--mantine-color-blue-0)' : undefined}
           >
             <div>
               <Text size="sm" fw={currentNetwork === network.id ? 500 : 400}>

@@ -13,11 +13,7 @@ export interface ApiError extends Error {
  * @param customMessage - Optional custom message to show instead of the default
  * @param showNotification - Whether to show a notification (default: true)
  */
-export function handleApiError(
-  error: ApiError,
-  customMessage?: string,
-  showNotification = true
-) {
+export function handleApiError(error: ApiError, customMessage?: string, showNotification = true) {
   console.error('API Error:', error);
 
   let title = 'Error';
@@ -34,28 +30,28 @@ export function handleApiError(
         // Trigger disconnect
         useAuthStore.getState().disconnect();
         break;
-      
+
       case 403:
         title = 'Access Denied';
         message = 'Administrator privileges required for this operation';
         break;
-      
+
       case 429:
         title = 'Rate Limited';
         color = 'yellow';
         autoClose = 3000;
         break;
-      
+
       case 501:
         title = 'Feature Unavailable';
         color = 'blue';
         break;
-      
+
       case 503:
         title = 'Service Unavailable';
         message = 'DevKit backend is not responding. Please check the service status.';
         break;
-      
+
       default:
         if (error.status >= 500) {
           title = 'Server Error';
@@ -114,11 +110,11 @@ export async function withErrorHandling<T>(
 ): Promise<T | null> {
   try {
     const result = await apiCall();
-    
+
     if (successMessage) {
       handleApiSuccess(successMessage);
     }
-    
+
     return result;
   } catch (error) {
     handleApiError(error as ApiError, errorMessage);
@@ -168,11 +164,11 @@ export function getErrorMessage(error: ApiError): string {
 export function isRecoverableError(error: ApiError): boolean {
   // Non-recoverable errors
   const nonRecoverableStatuses = [400, 401, 403, 404, 501];
-  
+
   if (error.status && nonRecoverableStatuses.includes(error.status)) {
     return false;
   }
-  
+
   // Network errors and server errors are usually recoverable
   return true;
 }

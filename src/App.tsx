@@ -1,12 +1,5 @@
-import {
-  AppShell,
-  Burger,
-  Container,
-  Group,
-  NavLink,
-  Text,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { AppShell, Burger, Container, Group, NavLink, Text } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import {
   IconCode,
   IconCurrencyDollar,
@@ -14,24 +7,24 @@ import {
   IconNetwork,
   IconSettings,
   IconWallet,
-} from "@tabler/icons-react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { Header } from "./components/Header";
-import Accounts from "./pages/Accounts";
-import Contracts from "./pages/Contracts";
-import Dashboard from "./pages/Dashboard";
-import Network from "./pages/Network";
-import Protocols from "./pages/Protocols.tsx";
-import Settings from "./pages/Settings";
-import { useWebSocket } from "./services/websocket";
+} from '@tabler/icons-react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Header } from './components/Header';
+import Accounts from './pages/Accounts';
+import Contracts from './pages/Contracts';
+import Dashboard from './pages/Dashboard';
+import Network from './pages/Network';
+import Protocols from './pages/Protocols.tsx';
+import Settings from './pages/Settings';
+import { useWebSocket } from './services/websocket';
 
 const navigation = [
-  { label: "Dashboard", icon: IconHome, path: "/" },
-  { label: "Accounts", icon: IconWallet, path: "/accounts" },
-  { label: "Contracts", icon: IconCode, path: "/contracts" },
-  { label: "Protocols", icon: IconCurrencyDollar, path: "/protocols" },
-  { label: "Node Control", icon: IconNetwork, path: "/network" },
-  { label: "Settings", icon: IconSettings, path: "/settings" },
+  { label: 'Dashboard', icon: IconHome, path: '/' },
+  { label: 'Accounts', icon: IconWallet, path: '/accounts' },
+  { label: 'Contracts', icon: IconCode, path: '/contracts' },
+  { label: 'Protocols', icon: IconCurrencyDollar, path: '/protocols' },
+  { label: 'Node Control', icon: IconNetwork, path: '/network' },
+  { label: 'Settings', icon: IconSettings, path: '/settings' },
 ];
 
 export default function App() {
@@ -47,7 +40,7 @@ export default function App() {
       header={{ height: 60 }}
       navbar={{
         width: 250,
-        breakpoint: "sm",
+        breakpoint: 'sm',
         collapsed: { mobile: !opened },
       }}
       padding="md"
@@ -55,12 +48,7 @@ export default function App() {
       <AppShell.Header>
         <Group h="100%" px="md" justify="space-between">
           <Group>
-            <Burger
-              opened={opened}
-              onClick={toggle}
-              hiddenFrom="sm"
-              size="sm"
-            />
+            <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Text size="xl" fw={700} c="blue">
               Conflux Box
             </Text>

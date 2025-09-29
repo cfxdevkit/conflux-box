@@ -1,8 +1,8 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConnectKitProvider } from "connectkit";
-import React from "react";
-import { WagmiProvider } from "wagmi";
-import { config } from "../config/wagmi";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ConnectKitProvider } from 'connectkit';
+import type React from 'react';
+import { WagmiProvider } from 'wagmi';
+import { config } from '../config/wagmi';
 
 // Create a client for React Query
 const queryClient = new QueryClient({
@@ -30,7 +30,7 @@ export function WagmiProviderWrapper({ children }: WagmiProviderWrapperProps) {
           options={{
             initialChainId: config.chains[0].id,
             disclaimer:
-              "By connecting your wallet, you agree to use Conflux DevKit for development purposes.",
+              'By connecting your wallet, you agree to use Conflux DevKit for development purposes.',
             hideBalance: true,
             hideTooltips: false,
             hideQuestionMarkCTA: false,

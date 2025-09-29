@@ -9,7 +9,7 @@ import {
   Tabs,
   Text,
   Title,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   IconAlertCircle,
   IconCode,
@@ -18,22 +18,18 @@ import {
   IconPlus,
   IconRocket,
   IconTemplate,
-} from "@tabler/icons-react";
-import { useEffect, useState } from "react";
-import { ContractInteraction } from "../components/ContractInteraction";
-import { DeploymentWizard } from "../components/DeploymentWizard";
-import { ContractTemplate, contractTemplates } from "../data/contractTemplates";
-import {
-  useAutoDevKitStatus,
-  useCurrentNetwork,
-  useStartNode,
-} from "../hooks/useDevKit";
+} from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { ContractInteraction } from '../components/ContractInteraction';
+import { DeploymentWizard } from '../components/DeploymentWizard';
+import { type ContractTemplate, contractTemplates } from '../data/contractTemplates';
+import { useAutoDevKitStatus, useCurrentNetwork, useStartNode } from '../hooks/useDevKit';
 
 interface DeployedContract {
   address: string;
   name: string;
   abi: any[];
-  chain: "core" | "evm";
+  chain: 'core' | 'evm';
   deployedAt: string;
 }
 
@@ -43,40 +39,30 @@ export default function Contracts() {
   const startNodeMutation = useStartNode();
 
   const [wizardOpened, setWizardOpened] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<
-    ContractTemplate | undefined
-  >(undefined);
-  const [deployedContracts, setDeployedContracts] = useState<
-    DeployedContract[]
-  >([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<ContractTemplate | undefined>(undefined);
+  const [deployedContracts, setDeployedContracts] = useState<DeployedContract[]>([]);
 
-  const currentNetwork = currentNetworkData?.network || "local";
+  const currentNetwork = currentNetworkData?.network || 'local';
   const nodeRunning = devkitStatus?.running || false;
-  const isExternalNetwork = currentNetwork !== "local";
+  const isExternalNetwork = currentNetwork !== 'local';
 
   // Load deployed contracts from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem("deployedContracts");
+    const saved = localStorage.getItem('deployedContracts');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setDeployedContracts(parsed);
-        else
-          console.warn(
-            "deployedContracts in localStorage is not an array, ignoring"
-          );
+        else console.warn('deployedContracts in localStorage is not an array, ignoring');
       } catch (error) {
-        console.error("Failed to parse deployed contracts:", error);
+        console.error('Failed to parse deployed contracts:', error);
       }
     }
   }, []);
 
   // Save deployed contracts to localStorage
   useEffect(() => {
-    localStorage.setItem(
-      "deployedContracts",
-      JSON.stringify(deployedContracts)
-    );
+    localStorage.setItem('deployedContracts', JSON.stringify(deployedContracts));
   }, [deployedContracts]);
 
   const openWizard = (template?: ContractTemplate) => {
@@ -88,9 +74,7 @@ export default function Contracts() {
     setDeployedContracts((prev) => {
       const combined = [...prev];
       contracts.forEach((c) => {
-        const exists = combined.some(
-          (x) => x.address === c.address && x.chain === c.chain
-        );
+        const exists = combined.some((x) => x.address === c.address && x.chain === c.chain);
         if (!exists) combined.push(c);
       });
       return combined;
@@ -107,7 +91,7 @@ export default function Contracts() {
   };
 
   // Disable contracts when on local network and node is not running
-  const isDisabled = currentNetwork === "local" && !nodeRunning;
+  const isDisabled = currentNetwork === 'local' && !nodeRunning;
 
   if (isDisabled) {
     return (
@@ -122,8 +106,8 @@ export default function Contracts() {
           <Group justify="space-between" align="flex-start">
             <div>
               <Text size="sm">
-                Contract deployment and interaction requires a running local
-                DevKit node when connected to the local network.
+                Contract deployment and interaction requires a running local DevKit node when
+                connected to the local network.
               </Text>
             </div>
             <Button
@@ -143,8 +127,7 @@ export default function Contracts() {
             <IconCode size={48} color="gray" />
             <Text c="dimmed">Contract operations disabled</Text>
             <Text size="sm" c="dimmed" ta="center">
-              Start the local DevKit node to deploy and interact with smart
-              contracts
+              Start the local DevKit node to deploy and interact with smart contracts
             </Text>
             <Button
               leftSection={<IconPlayerPlay size={16} />}
@@ -166,9 +149,7 @@ export default function Contracts() {
             setDeployedContracts((prev) => {
               const combined = [...prev];
               contracts.forEach((c) => {
-                const exists = combined.some(
-                  (x) => x.address === c.address && x.chain === c.chain
-                );
+                const exists = combined.some((x) => x.address === c.address && x.chain === c.chain);
                 if (!exists) combined.push(c);
               });
               return combined;
@@ -194,16 +175,11 @@ export default function Contracts() {
       </Group>
 
       {isExternalNetwork && (
-        <Alert
-          icon={<IconAlertCircle size={16} />}
-          color="blue"
-          title="External Network Mode"
-        >
+        <Alert icon={<IconAlertCircle size={16} />} color="blue" title="External Network Mode">
           <Text size="sm">
-            You are connected to <strong>{currentNetwork}</strong> network.
-            Contract deployment and interaction features are currently limited
-            to local DevKit instances. When the backend adds external network
-            support, you'll be able to interact with contracts on testnet and
+            You are connected to <strong>{currentNetwork}</strong> network. Contract deployment and
+            interaction features are currently limited to local DevKit instances. When the backend
+            adds external network support, you'll be able to interact with contracts on testnet and
             mainnet.
           </Text>
         </Alert>
@@ -225,10 +201,7 @@ export default function Contracts() {
               <Stack align="center" gap="sm">
                 <IconCode size={48} color="gray" />
                 <Text c="dimmed">No contracts deployed yet</Text>
-                <Button
-                  leftSection={<IconPlus size={16} />}
-                  onClick={() => openWizard()}
-                >
+                <Button leftSection={<IconPlus size={16} />} onClick={() => openWizard()}>
                   Deploy Your First Contract
                 </Button>
               </Stack>
@@ -267,10 +240,7 @@ export default function Contracts() {
                     >
                       Configure
                     </Button>
-                    <Button
-                      size="xs"
-                      onClick={() => handleTemplateQuickDeploy(template)}
-                    >
+                    <Button size="xs" onClick={() => handleTemplateQuickDeploy(template)}>
                       Quick Deploy
                     </Button>
                   </Group>

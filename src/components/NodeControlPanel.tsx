@@ -10,7 +10,7 @@ import {
   Stack,
   Text,
   Title,
-} from "@mantine/core";
+} from '@mantine/core';
 import {
   IconActivity,
   IconClock,
@@ -19,12 +19,12 @@ import {
   IconSettings,
   IconShield,
   IconTool,
-} from "@tabler/icons-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React from "react";
-import { DevKitApiService } from "../services/api";
-import { useAuthStore } from "../stores/authStore";
-import { handleApiError, handleApiSuccess } from "../utils/errorHandling";
+} from '@tabler/icons-react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React from 'react';
+import { DevKitApiService } from '../services/api';
+import { useAuthStore } from '../stores/authStore';
+import { handleApiError, handleApiSuccess } from '../utils/errorHandling';
 
 interface NodeControlPanelProps {
   currentMiningStatus?: {
@@ -33,7 +33,7 @@ interface NodeControlPanelProps {
     blocksMined: number;
   };
   nodeRunning: boolean;
-  networkType: "local" | "testnet" | "mainnet";
+  networkType: 'local' | 'testnet' | 'mainnet';
 }
 
 export function NodeControlPanel({
@@ -43,13 +43,86 @@ export function NodeControlPanel({
 }: NodeControlPanelProps) {
   const { isAdmin } = useAuthStore();
   const queryClient = useQueryClient();
-  const [miningInterval, setMiningInterval] = React.useState(
-    currentMiningStatus?.interval || 1000
-  );
+  const [miningInterval, setMiningInterval] = React.useState(currentMiningStatus?.interval || 1000);
   const [blocksToMine, setBlocksToMine] = React.useState(1);
 
+  // Mutations for node operations (moved to top to avoid hook rule violations)
+  const startNodeMutation = useMutation({
+    mutationFn: DevKitApiService.startNode,
+    onSuccess: () => {
+      handleApiSuccess('Node started successfully');
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+    },
+    onError: (error) => {
+      handleApiError(error as any, 'Failed to start node');
+    },
+  });
+
+  const stopNodeMutation = useMutation({
+    mutationFn: DevKitApiService.stopNode,
+    onSuccess: () => {
+      handleApiSuccess('Node stopped successfully');
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+    },
+    onError: (error) => {
+      handleApiError(error as any, 'Failed to stop node');
+    },
+  });
+
+  const startMiningMutation = useMutation({
+    mutationFn: DevKitApiService.startMining,
+    onSuccess: () => {
+      handleApiSuccess('Mining started successfully');
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+    },
+    onError: (error) => {
+      handleApiError(error as any, 'Failed to start mining');
+    },
+  });
+
+  const stopMiningMutation = useMutation({
+    mutationFn: DevKitApiService.stopMining,
+    onSuccess: () => {
+      handleApiSuccess('Mining stopped successfully');
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+    },
+    onError: (error) => {
+      handleApiError(error as any, 'Failed to stop mining');
+    },
+  });
+
+  const setMiningIntervalMutation = useMutation({
+    mutationFn: DevKitApiService.setMiningInterval,
+    onSuccess: () => {
+      handleApiSuccess(`Mining interval set to ${miningInterval}ms`);
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+    },
+    onError: (error) => {
+      handleApiError(error as any, 'Failed to update mining interval');
+    },
+  });
+
+  const mineBlocksMutation = useMutation({
+    mutationFn: DevKitApiService.mineBlocks,
+    onSuccess: () => {
+      handleApiSuccess(`Successfully mined ${blocksToMine} blocks`);
+      queryClient.invalidateQueries({ queryKey: ['devkit-status'] });
+    },
+    onError: (error) => {
+      handleApiError(error as any, 'Failed to mine blocks');
+    },
+  });
+
+  const isLoading =
+    startNodeMutation.isPending ||
+    stopNodeMutation.isPending ||
+    startMiningMutation.isPending ||
+    stopMiningMutation.isPending ||
+    setMiningIntervalMutation.isPending ||
+    mineBlocksMutation.isPending;
+
   // Show alert if not local network
-  if (networkType !== "local") {
+  if (networkType !== 'local') {
     return (
       <Card withBorder padding="lg" radius="md">
         <Title order={4} mb="md">
@@ -60,9 +133,9 @@ export function NodeControlPanel({
         </Title>
         <Alert color="blue">
           <Text size="sm">
-            You are connected to <strong>{networkType}</strong> network. Node
-            control is only available for local DevKit instances. This will show
-            health checks for remote blockchain nodes.
+            You are connected to <strong>{networkType}</strong> network. Node control is only
+            available for local DevKit instances. This will show health checks for remote blockchain
+            nodes.
           </Text>
         </Alert>
 
@@ -91,81 +164,6 @@ export function NodeControlPanel({
     );
   }
 
-  // Mutations for node operations
-  const startNodeMutation = useMutation({
-    mutationFn: DevKitApiService.startNode,
-    onSuccess: () => {
-      handleApiSuccess("Node started successfully");
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-    },
-    onError: (error) => {
-      handleApiError(error as any, "Failed to start node");
-    },
-  });
-
-  const stopNodeMutation = useMutation({
-    mutationFn: DevKitApiService.stopNode,
-    onSuccess: () => {
-      handleApiSuccess("Node stopped successfully");
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-    },
-    onError: (error) => {
-      handleApiError(error as any, "Failed to stop node");
-    },
-  });
-
-  const startMiningMutation = useMutation({
-    mutationFn: DevKitApiService.startMining,
-    onSuccess: () => {
-      handleApiSuccess("Mining started successfully");
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-    },
-    onError: (error) => {
-      handleApiError(error as any, "Failed to start mining");
-    },
-  });
-
-  const stopMiningMutation = useMutation({
-    mutationFn: DevKitApiService.stopMining,
-    onSuccess: () => {
-      handleApiSuccess("Mining stopped successfully");
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-    },
-    onError: (error) => {
-      handleApiError(error as any, "Failed to stop mining");
-    },
-  });
-
-  const setMiningIntervalMutation = useMutation({
-    mutationFn: DevKitApiService.setMiningInterval,
-    onSuccess: () => {
-      handleApiSuccess(`Mining interval set to ${miningInterval}ms`);
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-    },
-    onError: (error) => {
-      handleApiError(error as any, "Failed to update mining interval");
-    },
-  });
-
-  const mineBlocksMutation = useMutation({
-    mutationFn: DevKitApiService.mineBlocks,
-    onSuccess: () => {
-      handleApiSuccess(`Successfully mined ${blocksToMine} blocks`);
-      queryClient.invalidateQueries({ queryKey: ["devkit-status"] });
-    },
-    onError: (error) => {
-      handleApiError(error as any, "Failed to mine blocks");
-    },
-  });
-
-  const isLoading =
-    startNodeMutation.isPending ||
-    stopNodeMutation.isPending ||
-    startMiningMutation.isPending ||
-    stopMiningMutation.isPending ||
-    setMiningIntervalMutation.isPending ||
-    mineBlocksMutation.isPending;
-
   return (
     <Card withBorder padding="lg" radius="md">
       <Title order={4} mb="md">
@@ -177,9 +175,7 @@ export function NodeControlPanel({
 
       {!isAdmin && (
         <Alert icon={<IconShield size={16} />} color="yellow" mb="md">
-          <Text size="sm">
-            Admin access required for node control operations
-          </Text>
+          <Text size="sm">Admin access required for node control operations</Text>
         </Alert>
       )}
 
@@ -193,12 +189,12 @@ export function NodeControlPanel({
             <Button
               leftSection={<IconPlayerPlay size={16} />}
               color="green"
-              variant={nodeRunning ? "light" : "filled"}
+              variant={nodeRunning ? 'light' : 'filled'}
               disabled={!isAdmin || isLoading || nodeRunning}
               onClick={() => startNodeMutation.mutate()}
               loading={startNodeMutation.isPending}
             >
-              {nodeRunning ? "Node Running" : "Start Node"}
+              {nodeRunning ? 'Node Running' : 'Start Node'}
             </Button>
             <Button
               leftSection={<IconPlayerStop size={16} />}
@@ -224,29 +220,17 @@ export function NodeControlPanel({
               <Button
                 leftSection={<IconTool size={16} />}
                 color="blue"
-                variant={currentMiningStatus?.isRunning ? "light" : "filled"}
-                disabled={
-                  !isAdmin ||
-                  isLoading ||
-                  !nodeRunning ||
-                  currentMiningStatus?.isRunning
-                }
+                variant={currentMiningStatus?.isRunning ? 'light' : 'filled'}
+                disabled={!isAdmin || isLoading || !nodeRunning || currentMiningStatus?.isRunning}
                 onClick={() => startMiningMutation.mutate()}
                 loading={startMiningMutation.isPending}
               >
-                {currentMiningStatus?.isRunning
-                  ? "Mining Active"
-                  : "Start Mining"}
+                {currentMiningStatus?.isRunning ? 'Mining Active' : 'Start Mining'}
               </Button>
               <Button
                 leftSection={<IconPlayerStop size={16} />}
                 color="orange"
-                disabled={
-                  !isAdmin ||
-                  isLoading ||
-                  !nodeRunning ||
-                  !currentMiningStatus?.isRunning
-                }
+                disabled={!isAdmin || isLoading || !nodeRunning || !currentMiningStatus?.isRunning}
                 onClick={() => stopMiningMutation.mutate()}
                 loading={stopMiningMutation.isPending}
               >
@@ -316,11 +300,8 @@ export function NodeControlPanel({
                       <Text size="xs" c="dimmed">
                         Status:
                       </Text>
-                      <Badge
-                        size="xs"
-                        color={currentMiningStatus.isRunning ? "green" : "gray"}
-                      >
-                        {currentMiningStatus.isRunning ? "Running" : "Stopped"}
+                      <Badge size="xs" color={currentMiningStatus.isRunning ? 'green' : 'gray'}>
+                        {currentMiningStatus.isRunning ? 'Running' : 'Stopped'}
                       </Badge>
                     </Group>
                   </Grid.Col>
